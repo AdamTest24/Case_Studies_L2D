@@ -1,0 +1,587 @@
+---
+title: "Antibodies - Case Study"
+teaching: 10
+exercises: 2
+---
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- How may we create a machine learning classifier that can tell apart two groups of proteins?
+
+- How may we improve upon the performance of a machine learning classifier that does not perform so well?
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Understand how protein sequences can become readable to machine learning predictors
+
+- Practise machine learning optimisation techniques including GridSearchCV and dimensionality reduction
+
+- Check for overfitted data by testing with a totally naive dataset
+
+- Practice prediction by applying a deep learning model to the problem and evaluating its performance
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+### **Separating Mouse and Human Antibody Sequences using Protein Encoding and Machine Learning Classifiers**
+
+
+## Introduction 
+
+If we want to generate a classifier that observes the differences between two groups of protein sequences, then we need to extract numerical information from our sequences. This is called encoding and can be done through a variety of ways including residue level encoding of each amino acid in your sequences with a 1x20 vector, representing the possibility of 20 amino acids at each residue. This is called One-Hot Encoding, but often leads to a sparse dataset which is not suitable for machine learning tasks, and each sequence must be spaced out so they are of equal length. Instead, in this example we use the physiochemical properties that may be calculated from the sequence as our numeric information ([ElAbd *et al.*, 2020](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-020-03546-x)). 
+
+## Antibodies
+
+Antibodies are made up of two heavy and two light chains, however, the functional antigen-binding domains are Fv fragments at each fork of the "Y" shape. These Fv fragments are where the VH domain of a heavy chain and VL domain of a light chain interact and so much study has been dedicated to these regions. An antibody record is considered "paired" when both the VH and VL sequences of one antibody are known. This knowledge was rare in the past and came from studying individual antibodies, however, the advent of B-cell encapsulation and Next Generation Sequencing now allowed researchers to sequence a repertoire of paired antibodies ([Rajan *et al.*, 2018](https://www.nature.com/articles/s42003-017-0006-2)).
+
+::::::::::::::: discussion
+## Dataset 
+In this lesson, we will use a sample of 1000 Human and 1000 Mouse paired antibodies taken from the Observed Antibody Space ([Olsen *et al.*, 2022](https://onlinelibrary.wiley.com/doi/10.1002/pro.4205)) and develop a machine learning classifier to separate them. 
+
+1. Firstly, we will use Propythia ([Sequeira *et al.*, 2022](https://www.sciencedirect.com/science/article/pii/S0925231221016568?via%3Dihub)) to generate our encodings from an input of Fasta formatted sequences. 
+
+2. Secondly, we will split those encodings into training and test datasets for a selection of machine learning classifiers and plot our results. 
+
+3. Finally we will try to improve our performance through principal component analysis (PCA), which also helps to visualise our dataset.
+
+:::::::::::::::
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(reticulate)
+use_python("/Users/sabaferdous/envL2D/bin/python3")
+
+# version = "3.10.4"
+# conda_create(envname = "r-antibdy", python_version = version)
+# conda_install(envname = "r-antibdy", c("pandas", "matplotlib", "scikit-learn"))
+#use_virtualenv("r-antibdy")
+```
+
+### **Get Encodings**
+```{python}
+import sys
+import pandas as pd
+from pandas import read_csv
+sys.path.append('../src/')
+sys.path.append('')
+from propythia.sequence import ReadSequence
+sequence=ReadSequence()
+from propythia.descriptors import Descriptor
+
+```
+
+### **Data preparation**
+```{python}
+from sklearn.utils import check_random_state, shuffle
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.preprocessing import StandardScaler
+import numpy as np
+from numpy import pi, linspace, cos, sin, append, ones, zeros, hstack, vstack, intp
+from numpy import mgrid, linspace, c_, arange, mean, array
+from numpy.random import uniform, seed
+
+```
+
+### **Machine Learning Models**
+```{python}
+from sklearn.neural_network import MLPClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.gaussian_process.kernels import RBF
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn.mixture import GaussianMixture
+from sklearn.cluster import KMeans
+from sklearn.cluster import DBSCAN
+from sklearn.cluster import SpectralClustering
+from sklearn.cluster import AffinityPropagation
+```
+
+### **Plotting Results**
+```{python}
+import matplotlib.pyplot as plt
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
+from mpl_toolkits import mplot3d
+from matplotlib.pyplot import subplots, axes, scatter, xticks
+from matplotlib.colors import ListedColormap
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import plot_confusion_matrix
+from sklearn.metrics.cluster import adjusted_rand_score
+from sklearn import metrics
+from sklearn.metrics import matthews_corrcoef
+```
+
+### **Model Optimisation**
+```{python}
+from sklearn.decomposition import PCA
+from sklearn.model_selection import GridSearchCV
+from sklearn.metrics import make_scorer
+```
+
+## Generating the Encoded Dataset
+Here we input our fasta file and split the entries into VH and VL sequences. We put each set of sequences through the Propythia encoder a dataframe of numerical information for both VH and VL sequences. There are 4000 records in the fasta file representing 2000 paired antibodies: 1000 human and 1000 mouse.
+
+### **Python Functions**
+This Python function will retrieve a selection of encodings that are not dependent on the sequence length.
+
+```{python}
+## Propythia Command to get encodings
+def get_descriptors(protein):
+    encodings= protein.adaptable([3,4,5,6,7,8,9,10,11,12,13,14,17,18,19,20,21])
+    return(encodings)
+```
+
+This Python function is created to obtain a datafile (in `.csv` format) containing the encodings of VH and VL chains for all the given number of sequences. In this example we need to obtain encodings of 1000 Human and 1000 Mouse antibody sequences. 
+
+```{python}
+def Get_dataset(fasta):
+    VH_sequences = []
+    VL_sequences = []
+    with open(fasta, "r") as f:
+        for line in f:
+            if line[0] == ">":
+                if "_VH" in line:
+                    sequence_to_add = f.readline().strip()
+                    VH_sequences.append(sequence_to_add)
+                elif "_VL" in line:
+                    sequence_to_add = f.readline().strip()
+                    VL_sequences.append(sequence_to_add)
+
+    print(len(VH_sequences),len(VL_sequences))
+    if len(VH_sequences) == len(VL_sequences):
+        VH_dataframe = pd.DataFrame()
+        VL_dataframe = pd.DataFrame()
+        for i in range(len(VH_sequences)):
+            ps_string=sequence.read_protein_sequence(VH_sequences[i])
+            protein = Descriptor(ps_string)
+            descriptors = get_descriptors(protein)
+            VH_dataframe = VH_dataframe.append(descriptors, ignore_index=True)
+        print("VH_data", VH_dataframe.shape)
+        for i in range(len(VL_sequences)):
+            ps_string=sequence.read_protein_sequence(VL_sequences[i])
+            protein = Descriptor(ps_string)
+            descriptors = get_descriptors(protein)
+            VL_dataframe = VL_dataframe.append(descriptors, ignore_index=True)
+        print("VL_data", VL_dataframe.shape)
+# Now we join these two dataframes together so that each
+# sample now has information about its VH and VL sequence.
+    VH_dataframe_suffix = VH_dataframe.add_suffix('_VH')
+    VL_dataframe_suffix = VL_dataframe.add_suffix('_VL')
+    joined_dataframe_VH_VL = VH_dataframe_suffix.join(VL_dataframe_suffix)
+    return(joined_dataframe_VH_VL)
+```
+
+:::::::::::::::: callout
+## Note
+The code below reads fasta file containing sequences of Human and Mouse antibodies and passes through Propythia program to calculate encodings. This step is computationally expensive and can take longer time depending on the specifications of your computer. If it does not work for you, you may skip this step and run the code in the next block where pre-calculated encodings can be directly loaded into the memory. 
+::::::::::::::::
+
+```{python, results = "hold"}
+#Input Fasta and Run Dataset
+##input_fasta = "data/HumanMouseOAS_VH_VL_paired_data.faa"
+
+##joined_dataframe_VH_VL = Get_dataset(input_fasta)
+
+# Optionally save dataframe as a CSV to simply reload it in future
+## joined_dataframe_VH_VL.to_csv("data/HumanMouseOAS_VH_VL_paired_data.faa_Full_descriptors.csv")
+
+
+```
+
+Run this block of code to directly load the pre-calculated encodings. 
+
+```{python}
+joined_dataframe_VH_VL = read_csv("data/HumanMouseOAS_VH_VL_paired_data.faa_Full_descriptors.csv", header = 0)
+
+joined_dataframe_VH_VL
+```
+
+This data frame shows that there are 2000 rows (one for each sequence) and 891 columns for multiple encodings. 
+
+::::::::::::::::::::::::::::::: challenge 
+
+## Do it Yourself
+
+These encodings used with Propythia were selected to reduce the time taken to run. Retry the encoding step and experiment with the protein.adaptable([3,4,5,6,7,8,9,10,11,12,13,14,17,18,19,20,21]) array.
+
+::::::::::callout 
+## Note
+Propythia accepts numbers 0-40 however we avoid 1, 2 and 37 as these produce outputs of differing length
+::::::::::	
+
+::::::::::::::::: solution
+	
+## DIY ANSWER
+
+:::::::::::::::::
+
+::::::::::::::::::::::::::::::: 
+
+### **Generating labels for Machine Learning**
+Now we have our encodings, we need to prepare our labels. As our input was ordered 1000 Human antibodies and 1000 Mouse antibodies we can simply make a list showing only these:
+
+```{python, results = "hold"}
+RANDOM_SEED = 0
+# Prepare training data and labels
+labels1 = 1000*[1] # Human antibodies will be class 1
+labels2 = 1000*[0] # Mouse antibodies will be class 0
+labels = labels1+labels2
+y=labels
+print(len(y))
+
+#Mouse ==1, Human == 0
+
+dataset = joined_dataframe_VH_VL
+dataset=dataset.loc[:, dataset.columns != 'Unnamed: 0'] # Removed the column called 'Unnamed'
+print(dataset.shape) # Just to check that you have an equal number of labels to the number of samples
+```
+
+Now that we have our dataset, we may want to split these into training dataset for fitting our classifiers to and test dataset to verify their effectiveness as predictors. Usually 70/30 or 80/20 split is necessary.
+
+```{python}
+X_train, X_test, y_train, y_test = train_test_split(dataset, y, test_size=.3, random_state=RANDOM_SEED, shuffle=True)
+
+num_rows, num_cols = dataset.shape
+
+print("Training set size: ", X_train.shape, "       Test set size: ", X_test.shape)
+
+
+```
+
+### **Separating our data with Machine Learning Classifiers**
+Here is our list of classifiers that we will loop through to see which is the best at clustering our dataset.
+
+```{python}
+n=2
+RANDOM_SEED=42
+classifiers = {
+    'Guassian':GaussianMixture(n_components=n),
+    'KMeans': KMeans(n_clusters=n) ,
+    'KNeighbours': KNeighborsClassifier(2),
+    'SVC':SVC(kernel="linear", C=0.025),
+   'SVC2': SVC(gamma=2, C=1),
+    'DecisionTree': DecisionTreeClassifier(max_depth=5),
+    'RFC': RandomForestClassifier(max_depth=5, n_estimators=10, max_features=1),
+    'MLPC': MLPClassifier(alpha=1, max_iter=1000),
+    'ADABoost':AdaBoostClassifier(),
+    'GaussianNB': GaussianNB(),
+    'QDA':QuadraticDiscriminantAnalysis(),
+}
+```
+
+Now loop over our classifiers and use the test and train datasets to generate a score to validate the classifiers. I have chosen Matthews Correlation Coefficient (MCC) which is a metric less prone to bias by taking into account false predictions, as well as true predictions. This metric lies on a score between -1 (inverse prediction) and 1 (perfect prediction) with 0 being coin toss likelihood. We then plot our results as a confusion matrix which demonstrates the predictive power of our classifiers. The Confusion matrix shows the raw number of records that have been assigned to each category in a 2x2 matrix and is given as such: 
+
+|                  | Predicted Class = 0  | Predicted Class = 1 |
+|------------------|----------------------|---------------------|
+| Actual Class = 0 | True Negative        | False Positive      |
+| Actual Class = 1 |  False Negative      | True Positive       |
+
+Ideally we want the True Negative and True Positive field to be the most popular fields with only a few records in the false positive fields.
+
+:::::::::::: callout
+Results may vary between each run due to the stochastic nature of the machine learning algorithms.
+::::::::::::
+
+::::::::::::::::::::::::::::::: challenge 
+
+## Do it Yourself
+This is not an exhaustive list of classifiers. These were mostly picked to represent all of the different kinds of models. Here you will find a much larger list of classifiers. Try adding some to the classifiers dictionary and see how the results differ. Additional models that are supported in scikit learn can be found [here](https://scikit-learn.org/stable/supervised_learning.html).
+
+::::::::::::::::: solution
+	
+## DIY ANSWER
+
+
+:::::::::::::::::
+
+::::::::::::::::::::::::::::::: 
+
+```{python}
+##Loop through each classifier, fit training data and evaluate model. Plot results as confusion matrix##
+scores = []
+
+for i in classifiers:
+    clf_1 = classifiers.get(i)
+    clf_1.fit(X_train,y_train)
+    y_predict1 = clf_1.predict(X_test)
+    scoring = matthews_corrcoef(y_test, y_predict1)
+    scores.append(scoring)     
+    cf_matrix1 = confusion_matrix(y_test, y_predict1)
+    ax1 = sns.heatmap(cf_matrix1, annot=True, cmap='summer')
+    title = str(str(i) + "_MCC_"+str(scoring))
+    ax1.set_title(title);
+    ax1.set_xlabel('Predicted Values')
+    ax1.set_ylabel('Actual Values ');
+    plt.show()
+
+```
+
+Next, we can plot our MCC scores by classifier to see which performed best.
+
+```{python, results = "hold"}
+##Plot Performance of all Models##
+fig, ax = plt.subplots(figsize=(8,6))
+plt.suptitle('Performance of Machine Learning Classifiers Against Mouse and Human Antibodies', fontsize=20)
+
+bins = arange(len(classifiers))
+ax.bar(arange(len(scores)), scores);
+ax.set_ylabel('Matthews Correlation Coefficient')
+ax.set_xlabel('Classifiers')
+ax.set_xticks(bins)
+ax.set_xticklabels(classifiers, rotation=-80);
+
+plt.show()
+```
+
+From the above chart, we can see that the best performing predictors are ADA_Boost, GaussinNB, DecisionTree and SVC, wheras both Gaussian and KMeans are the worst performing with negative MCC scores.
+
+
+## Improving the Performance
+
+When a machine learning predictor is performing well, there is always the possibility of improving its performance through hyperparameterisation. This means editing its parameters until a maximum score and optimisation are reached. This is usually done through either `GridSearchCV`, which does this using a reference grid and systematically compares each combination with every other; or `RandomSearchCV` - which is more stochastic and, instead, samples from ranges which may be applied to each parameter. Here we will apply the `GridSearchCV` on both the SVC2 and RandomForestClassifier predictor, in order to try and increase its performance on our dataset.
+
+It is important to know that not all classifiers have the capacity for `GridSearchCV`.
+
+::::::::callout
+## Note
+These processes will likely take a few minutes.
+
+::::::::
+
+### **GridsearchCV of SVC Model**
+
+```{python, eval = FALSE}
+##GridsearchCV of SVC Model####
+param_grid = {'C':[1,10,100,1000],
+              'gamma':[2,1,0.1,0.001],
+              'kernel':['linear','rbf']
+}
+
+svc = SVC()
+svc_grid_search = GridSearchCV(estimator = svc, param_grid=  param_grid,
+                               refit = True, n_jobs = -1,verbose = 2)
+
+svc_grid_search.fit(X_train,y_train)
+```
+
+### **GridsearchCV of RFC Model**
+
+```{python, eval = FALSE}
+##GridsearchCV of RFC Model####
+
+param_grid = {
+    'bootstrap': [True],
+    'max_depth': [80, 90, 100, 110],
+    'max_features': [2, 3],
+    'min_samples_leaf': [3, 4, 5],
+    'min_samples_split': [8, 10, 12],
+    'n_estimators': [100, 200, 300, 1000]
+}
+# Create a based model
+rf = RandomForestClassifier()
+# Instantiate the grid search model
+rf_grid_search = GridSearchCV(estimator = rf, param_grid = param_grid, 
+                          refit = True, cv = 3, n_jobs = -1, verbose = 2)
+rf_grid_search.fit(X_train, y_train)
+```
+
+Let's plot some additional confusion matrices to check if these classifiers are working better after GridsearchCV
+
+```{python, eval = FALSE}
+##Plot SVC GRID SEARCH CONFUSION MATRIX###
+print(svc_grid_search.best_params_) ##Print the parameters which achieved the best score
+y_predict1 = svc_grid_search.predict(X_test)
+svc_grid_search_scoring = matthews_corrcoef(y_test, y_predict1)
+cf_matrix1 = confusion_matrix(y_test, y_predict1)
+ax1 = sns.heatmap(cf_matrix1, annot=True, cmap='summer')
+title = str("GridSearch_SVC2_MCC_"+str(svc_grid_search_scoring))
+ax1.set_title(title);
+ax1.set_xlabel('\nPredicted Values')
+ax1.set_ylabel('Actual Values ');
+plt.show()
+```
+
+```{python, eval = FALSE}
+##Plot RFC GRID SEARCH CONFUSION MATRIX###
+
+print(rf_grid_search.best_params_) ##Print the parameters which achieved the best score
+y_predict1 = rf_grid_search.predict(X_test)
+rf_grid_search_scoring = matthews_corrcoef(y_test, y_predict1)
+cf_matrix1 = confusion_matrix(y_test, y_predict1)
+ax1 = sns.heatmap(cf_matrix1, annot=True, cmap='summer')
+title = str("GridSearch_Random_Forest_Classifier_MCC_"+str(rf_grid_search_scoring))
+ax1.set_title(title);
+ax1.set_xlabel('\nPredicted Values')
+ax1.set_ylabel('Actual Values ');
+plt.show()
+```
+
+![](fig/GS_RFC.png)
+We can also compare the old MCC score to the new one and see how they have improved for ourselves.
+
+```{python, eval = FALSE}
+##Plot MCC values of SVC and RFC Models with and without GridsearchCV##
+import numpy as np 
+import matplotlib.pyplot as plt
+
+classifiers2 = ["SVC","RFC"]
+no_grid_scores = [scores[4],scores[6]]
+grid_scores = [svc_grid_search_scoring, rf_grid_search_scoring] 
+labels = classifiers2
+aranged = np.arange(len(classifiers2)) 
+width = 1/3
+
+fig, ax = plt.subplots(figsize=(10,8))
+
+bar1 = plt.bar(aranged, no_grid_scores, width,label = 'No GridSearchCV')
+bar2 = plt.bar(aranged+width, grid_scores , width,label = 'GridSearchCV')
+plt.suptitle('Performance of Machine Learning Classifiers Against Mouse and Human Antibodies with and Without GridSearchCV', fontsize=20)
+ax.set_ylabel('MCC')
+ax.set_xticks(aranged, labels, rotation = 90)
+ax.legend()
+
+
+plt.legend()
+plt.show()
+```
+
+![](fig/GS-comparison.png)
+
+We can see that both classifiers have an improved performance, however we have not seen substantial performance in the SVC. 
+
+::::::::::::::::::::::::::::::: challenge 
+
+## Do it Yourself
+`GridSearchCV` is not the only kind of hyperparameter optimisation technique. `RandomizedSearchCV` is similar to GridSearchCV but instead of iterating over every combination of specified parameter, it randomly samples intervals for for a given number of iterations and notes which settings score the best. Documentation can be found [here](https://scikit-learn.org/stable/supervised_learning.html).
+
+Try optimising the Random Forest Classifier with `RandomizedSearchCV` instead and see how similar the best parameters are and how similar the MCC values are.
+
+::::::::::::::::: solution
+	
+## DIY ANSWER
+
+
+:::::::::::::::::
+
+::::::::::::::::::::::::::::::: 
+
+## Feature Importance
+
+A Random Forest Classifier has a feature importance instance, where the features that contribute most highly to the determination of the classifier may be examined and plotted as percentages of their contribution. Using the best hyperparameters found by the `GridSearchCV` alogrithm, we may declare a new Random Forest and investigate which features are the most significant.
+
+```{python, results = "hold"}
+##Get Feature Importance from RFC Model and Plot Top 50 Features###
+RF_Best_Params = RandomForestClassifier(bootstrap= True, max_depth=80, max_features=3, min_samples_leaf= 3, min_samples_split= 10, n_estimators= 100)
+RF_Best_Params.fit(X_train, y_train)
+importances  =  RF_Best_Params.feature_importances_
+sorted_importances = sorted(importances, reverse=True)
+feature_names = X_train.columns
+sorted_feature_names = [feature_names for _, feature_names in sorted(zip(importances, feature_names), reverse = True)]
+fig, ax = plt.subplots(figsize=(12,6))
+
+plt.suptitle('50 Highest Feature Importances in Ranfom Forest Machine Learning Classifier Between Mouse and Human Antibodies', fontsize=20)
+ax.bar(sorted_feature_names[:49], sorted_importances[:49]);
+ax.set_ylabel('Feature Importance')
+ax.set_xlabel('Feature')
+ax.set_xticklabels(sorted_feature_names[:49], rotation=-90);
+plt.show()
+```
+
+It seems most of the important features are related to amino acid composition, which is not surprising as this would be where the superficial diffierences in mouse and human sequences lay.
+
+::::::::::::::::::::::::::::::: challenge 
+
+## Do it Yourself
+
+We now have a list of all the feature names sorted by feature importance. By using the code below we can rework our dataframe to the 50 most important features:
+
+`X = X[sorted_feature_names][:49]`
+
+Try running the classifiers again, but this time use the top 50 features only as your input data. See how that improves each classifier. Are all of them improved?
+	
+	
+::::::::::::::::: solution
+	
+## DIY ANSWER
+
+
+:::::::::::::::::
+
+::::::::::::::::::::::::::::::: 
+
+## Testing our Classifiers on a Naïve Dataset
+
+We can also take a totally naïve dataset that the model has not been exposed to. This is a measure that checks for overfitting. If we see that there is poor performance on this naïve "held back" dataset, then it could suggest overfitting to the training data. Using 20 Human and 20 mouse paired sequences from OAS, which were not used to train our models, it is possible to generate their encodings, and pass them through the optimised model, in order to test it.  In this case, we will use only the top-performing models: ADABoost and GuassianNB.
+
+```{python}
+##Get Encodings for the Naïve Dataset###
+naive_fasta = 'data/Naive_dataset.faa.txt'
+naive_dataset = Get_dataset(naive_fasta)
+naive_labels1 = 20*[1]
+naive_labels2 = 20*[0]
+naive_labels = naive_labels1+naive_labels2
+naive_y=naive_labels
+```
+
+We should select high performing classifiers to test this naive dataset. We select the ADABoost and our improved RFC predictors to try this.
+
+```{python}
+###Predict the Classes of Naïve Datasets Using or Previously Fitted ADABoost and GRIDSEARCHCV RFC Models and Plot Confusion Matrix##
+clf = classifiers.get('ADABoost')
+y_predict1 = clf.predict(naive_dataset)
+scoring = matthews_corrcoef(naive_y, y_predict1)
+scores.append(scoring)     
+cf_matrix1 = confusion_matrix(naive_y, y_predict1)
+ax1 = sns.heatmap(cf_matrix1, annot=True, cmap='summer')
+title = str("ADABoost_Naive_dataset_"+str(scoring))
+ax1.set_title(title);
+ax1.set_xlabel('Predicted Values')
+ax1.set_ylabel('Actual Values ');
+plt.show()
+
+naive_labels = naive_labels1+naive_labels2
+naive_y=naive_labels
+clf = rf_grid_search
+y_predict1 = clf.predict(naive_dataset)
+scoring = matthews_corrcoef(naive_y, y_predict1)
+scores.append(scoring)     
+cf_matrix1 = confusion_matrix(naive_y, y_predict1)
+ax1 = sns.heatmap(cf_matrix1, annot=True, cmap='summer')
+title = str("RFC_gridsearch_Naive_dataset_"+str(scoring))
+ax1.set_title(title);
+ax1.set_xlabel('Predicted Values')
+ax1.set_ylabel('Actual Values ');
+plt.show()
+
+naive_labels = naive_labels1+naive_labels2
+naive_y=naive_labels
+clf = classifiers.get('KMeans')
+y_predict1 = clf.predict(naive_dataset)
+scoring = matthews_corrcoef(naive_y, y_predict1)
+scores.append(scoring)     
+cf_matrix1 = confusion_matrix(naive_y, y_predict1)
+ax1 = sns.heatmap(cf_matrix1, annot=True, cmap='summer')
+title = str("KMeans_Naive_dataset_"+str(scoring))
+ax1.set_title(title);
+ax1.set_xlabel('Predicted Values')
+ax1.set_ylabel('Actual Values ');
+plt.show()
+```
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- Protein sequences must be numerically encoded to be readable by machine learning algorithms.
+
+- It is sometimes necessary to experiment with different machine learning classifiers or hyperparameterisation techniques, to achieve the best prediction results.
+
+- Check the performance of your model with a "held back" dataset which was not included in the training set.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+[r-markdown]: https://rmarkdown.rstudio.com/
