@@ -1,0 +1,21 @@
+# Ignored paths and directories
+## pycharm project path
+.idea
+
+## ignore datapaths 
+**/NAME_OF_PATH
+
+## temporal __pycache__/
+**/__pycache__/
+
+## .ipynb_checkpoints/
+**/.ipynb_checkpoints
+
+## ignore training checkpoints
+**/*.pth
+
+## ignores vim temporal files
+**/*.swp
+
+## others
+**/.DS_Store
