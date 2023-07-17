@@ -1,3 +1,0 @@
-Mohamed Ali Badri has: 
-1. Created a third notebook 'xAI_dl.ipynb'
-2. Amended the existing 'Intro_dl_CNNs.ipynb' notebook: added a modification to the training loop in lesson 2 to speed it up, and saved the best model to be used in lesson 3 ('xAI_dl.ipynb').
