@@ -1,4 +1,4 @@
-name: base
+name: l2dVE
 channels:
   - conda-forge
 dependencies:
