@@ -1,0 +1,24 @@
+name: l2dVE
+channels:
+  - conda-forge
+dependencies:
+  - pytorch
+  - python
+  - torchvision
+  #- torchinfo
+  #- cudatoolkit
+  - pip
+  - pip:
+    - numpy
+    - matplotlib
+    - notebook
+    - jupyter
+    #- wandb
+    #- tqdm
+    #- seaborn
+    #- scikit-image
+    #- nibabel
+    #- pillow
+    #- datasets
+    #- torchmetrics
+    #- accelerate

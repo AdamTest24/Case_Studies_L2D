@@ -1,0 +1,21 @@
+# Ignored directories and files
+## pycharm project path
+.idea
+
+## ignore datapaths
+**/deep_learning_mab/Improved_notebooks/data/
+
+## temporal __pycache__/
+**/__pycache__/
+
+## .ipynb_checkpoints/
+**/.ipynb_checkpoints
+
+## ignore training checkpoints
+**/*.pth
+
+## ignores vim temporal files
+**/*.swp
+
+## others
+**/.DS_Store
