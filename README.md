@@ -40,7 +40,7 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 		<br />
 			<!-- ADD GITHUB REPOSITORY AND PROJECT, TITLE AND EMOJIS -->
 			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=zcqsntr" title="Code">💻</a> 
-			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=zcqsntr" title="Research and Documentation">📖  🔧 🔬 🤔 🔧 </a>
+			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=zcqsntr" title="Research and Documentation">📖  🔧 🔬 🤔 </a>
 	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
@@ -50,7 +50,7 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 			<br />
 		</a>
 			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=sanazjb" title="Code">💻</a> 
-			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=sanazjb" title="Research and Documentation">📖  🔧 🔬 🤔 🔧 </a>
+			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=sanazjb" title="Research and Documentation">📖  🔧 🔬 🤔 </a>
 	</td>
 <!-- CONTRIBUTOR -->
 	<td align="center">
@@ -60,7 +60,7 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 		</a>
 		<br />
 			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=edlowther" title="Code">💻</a> 
-			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=edlowther" title="Research and Documentation">📖  🔧 🔬 🤔 🔧 </a>
+			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=edlowther" title="Research and Documentation">📖  🔧 🔬 🤔 </a>
 	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
@@ -70,7 +70,7 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 		</a>
 		<br />
 			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=sfmig" title="Code">💻</a> 
-			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=sfmig" title="Research and Documentation">📖  🔧 🔬 🤔 🔧 </a>
+			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=sfmig" title="Research and Documentation">📖  🔧 🔬 🤔 </a>
 	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
@@ -80,7 +80,7 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 			<br />
 		</a>
 			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=mxochicale" title="Code">💻</a> 
-			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=mxochicale" title="Research and Documentation">📖  🔧 🔬 🤔 🔧 </a>
+			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=mxochicale" title="Research and Documentation">📖  🔧 🔬 🤔 </a>
 	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
@@ -90,7 +90,7 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 			<br />
 		</a>
 			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=dpshelio" title="Code">💻</a> 
-			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=dpshelio" title="Research and Documentation">📖  🔧 🔬 🤔 🔧 </a>
+			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=dpshelio" title="Research and Documentation">📖  🔧 🔬 🤔 </a>
 	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
