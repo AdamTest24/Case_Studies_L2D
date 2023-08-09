@@ -1,14 +1,8 @@
-<h1 align="center">
-Case Studies L2D
-</h1>
-<div align="center">
+# Case Studies for Learn to Discover
 
-Sofia Miñano, Miguel Xochicale, and Saba Ferdous
-
-University College London    
-UCL Centre for Advance Research Computing     
-</div>
-
+## Table of content
+1. Deep learning 
+2. Reinforcement learning 
 
 ## Clone repository
 * Generate your SSH keys as suggested [here](https://docs.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) (or [here](https://github.com/mxochicale/tools/blob/main/github/SSH.md))
@@ -36,6 +30,16 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 			<!-- ADD GITHUB REPOSITORY AND PROJECT, TITLE AND EMOJIS -->
 			<a href="https://github.com/$PROJECTNAME/$REPOSITORY_NAME/commits?author=" title="Research">  🔬 🤔  </a>
 	</td>
+<!-- CONTRIBUTOR -->
+	<td align="center">
+		<a href="https://github.com/edlowther"><img src="https://avatars1.githubusercontent.com/u/7374954?v=4?s=100" width="100px;" alt=""/>
+		<br />
+			<sub> <b>Ed Lowther</b> </sub>        
+		</a>
+		<br />
+			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=edlowther" title="Code">💻</a> 
+			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=edlowther" title="Research and Documentation">📖  🔧 🔬 🤔 🔧 </a>
+	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
 		<a href="https://github.com/sfmig"><img src="https://avatars1.githubusercontent.com/u/33267254?v=4?s=100" width="100px;" alt=""/>
@@ -43,8 +47,8 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 			<sub> <b>Sofia Miñano</b> </sub>        
 		</a>
 		<br />
-			<a href="https://github.com/mxochicale/medisynth/commits?author=sfmig" title="Code">💻</a> 
-			<a href="https://github.com/mxochicale/medisynth/commits?author=sfmig" title="Research">  🔬 🤔  </a>
+			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=sfmig" title="Code">💻</a> 
+			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=sfmig" title="Research and Documentation">📖  🔧 🔬 🤔 🔧 </a>
 	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
@@ -53,8 +57,30 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 			<sub><b>Miguel Xochicale</b></sub>          
 			<br />
 		</a>
-			<a href="https://github.com/mxochicale/medisynth/commits?author=mxochicale" title="Code">💻</a> 
-			<a href="ttps://github.com/mxochicale/medisynth/commits?author=mxochicale" title="Documentation">📖  🔧 </a>
+			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=mxochicale" title="Code">💻</a> 
+			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=mxochicale" title="Research and Documentation">📖  🔧 🔬 🤔 🔧 </a>
+	</td>
+	<!-- CONTRIBUTOR -->
+	<td align="center">
+		<!-- ADD GITHUB USERNAME AND HASH FOR GITHUB PHOTO -->
+		<a href="https://github.com/DrAdamLee"><img src="https://avatars1.githubusercontent.com/u/93711955?v=4?s=100" width="100px;" alt=""/>
+		<br />
+			<sub> <b>Adam Lee</b> </sub>        
+		</a>
+		<br />
+			<!-- ADD GITHUB REPOSITORY AND PROJECT, TITLE AND EMOJIS -->
+			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=DrAdamLee" title="Research">  🔬 🤔  </a>
+	</td>
+	<!-- CONTRIBUTOR -->
+	<td align="center">
+		<!-- ADD GITHUB USERNAME AND HASH FOR GITHUB PHOTO -->
+		<a href="https://github.com/sabaferdous12"><img src="https://avatars1.githubusercontent.com/u/7863996?v=4?s=100" width="100px;" alt=""/>
+		<br />
+			<sub> <b>Saba Ferdous</b> </sub>        
+		</a>
+		<br />
+			<!-- ADD GITHUB REPOSITORY AND PROJECT, TITLE AND EMOJIS -->
+			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=" title="Research">  🔬 🤔  </a>
 	</td>
   </tr>
 </table>
