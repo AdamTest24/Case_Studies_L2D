@@ -1,9 +1,8 @@
-# Ignored paths and directories
+# Ignored directories and files
 ## pycharm project path
 .idea
 
-## ignore datapaths 
-**/NAME_OF_PATH
+## ignore datapaths
 **/deep_learning_mab/Improved_notebooks/data/
 
 ## temporal __pycache__/
