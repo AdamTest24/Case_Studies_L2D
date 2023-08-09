@@ -5,6 +5,16 @@
 2. Reinforcement learning 
 
 ## Getting started!
+
+### In Codespace
+[![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new?repo=LearnToDiscover/Case_Studies_L2D)
+
+1. Open this repo in a Codespace (click the button above!)
+2. Open one of the notebooks
+3. Click the `Select kernel` button in the upper-right and select `Python X`
+4. Have fun! 🚀
+
+### In your local machine 
 * Launch jupyter notebook
 ``` 
 conda activate l2dVE && jupyter notebook --browser=firefox
