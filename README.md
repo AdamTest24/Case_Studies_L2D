@@ -6,15 +6,20 @@
 
 ## Getting started!
 
-### In Codespace (this will take few minutes)
+### In Codespace
 [![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new?repo=LearnToDiscover/Case_Studies_L2D)
 
+#### Creation of new codespace 
 1. Create a new  Codespace (click the button above!) using this repo. 
 2. Select repository, branch, Region and machine type (8-core [32GBRAM 64GB] if it is available)
 3. Press `Ctrl+Shit+p` to select `Add Dev Container`> `Create a new env` > Anaconda (python3) > Conda, Mamba (Miniforge) > Keep Defaul
 5. Open one of the notebooks `deep_leaarning_mab>1-Intro-dl_MLPs.ipynb`
 6. Click the `Select kernel` button in the upper-right and select `Install and ` > `base Python (opt/conda/bin/python)`
 7. Have fun! 🚀
+
+#### Using ready codespace 
+1. Open code space: 
+
 
 ### In your local machine 
 * Launch jupyter notebook
