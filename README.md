@@ -59,6 +59,18 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=maalbadri" title="Code">💻</a> 
 			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=maalbadri" title="Research and Documentation">📖  🔧 🔬 🤔 </a>
 	</td>
+<!-- CONTRIBUTOR -->
+	<td align="center">
+		<!-- ADD GITHUB USERNAME AND HASH FOR GITHUB PHOTO -->
+		<a href="https://github.com/Lgpoll"><img src="https://avatars1.githubusercontent.com/u/122795890?v=4?s=100" width="100px;" alt=""/>
+		<br />
+			<sub> <b>Louise Pollock</b> </sub>        
+		</a>
+		<br />
+			<!-- ADD GITHUB REPOSITORY AND PROJECT, TITLE AND EMOJIS -->
+			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=Lgpoll" title="Code">💻</a> 
+			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=Lgpoll" title="Research and Documentation">📖  🔧 🔬 🤔 </a>
+	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
 		<a href="https://github.com/sanazjb"><img src="https://avatars1.githubusercontent.com/u/31011905?v=4?s=100" width="100px;" alt=""/>
