@@ -6,15 +6,16 @@
 
 ## Getting started!
 
-### In Codespace
+### In Codespace (this will take few minutes)
 [![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new?repo=LearnToDiscover/Case_Studies_L2D)
 
-1. Open this repo in a Codespace (click the button above!)
+1. Create a new  Codespace (click the button above!) using this repo. 
 2. Select repository, branch, Region and machine type (8-core [32GBRAM 64GB] if it is available)
-3. Press `Ctrl+Shit+p` to select `Add Dev Container` > Anaconda (python3) > Conda, Mamba (Miniforge) > Keep Default
-4. Open one of the notebooks
-5. Click the `Select kernel` button in the upper-right and select `Python X`
-6. Have fun! 🚀
+3. Open a terminal and do `cd dependencies && conda env update -n base -f *.yml`
+3. Press `Ctrl+Shit+p` to select `Add Dev Container`> `Create a new env` > Anaconda (python3) > Conda, Mamba (Miniforge) > Keep Defaul
+5. Open one of the notebooks
+6. Click the `Select kernel` button in the upper-right and select `Python X`
+7. Have fun! 🚀
 
 ### In your local machine 
 * Launch jupyter notebook
