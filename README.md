@@ -30,6 +30,28 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 			<!-- ADD GITHUB REPOSITORY AND PROJECT, TITLE AND EMOJIS -->
 			<a href="https://github.com/$PROJECTNAME/$REPOSITORY_NAME/commits?author=" title="Research">  🔬 🤔  </a>
 	</td>
+	<!-- CONTRIBUTOR -->
+	<td align="center">
+		<!-- ADD GITHUB USERNAME AND HASH FOR GITHUB PHOTO -->
+		<a href="https://github.com/zcqsntr"><img src="https://avatars1.githubusercontent.com/u/33317183?v=4?s=100" width="100px;" alt=""/>
+		<br />
+			<sub> <b>Neythen Treloar</b> </sub>        
+		</a>
+		<br />
+			<!-- ADD GITHUB REPOSITORY AND PROJECT, TITLE AND EMOJIS -->
+			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=zcqsntr" title="Code">💻</a> 
+			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=zcqsntr" title="Research and Documentation">📖  🔧 🔬 🤔 🔧 </a>
+	</td>
+	<!-- CONTRIBUTOR -->
+	<td align="center">
+		<a href="https://github.com/sanazjb"><img src="https://avatars1.githubusercontent.com/u/31011905?v=4?s=100" width="100px;" alt=""/>
+			<br />
+			<sub><b>Sanaz Jabbari</b></sub>          
+			<br />
+		</a>
+			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=sanazjb" title="Code">💻</a> 
+			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=sanazjb" title="Research and Documentation">📖  🔧 🔬 🤔 🔧 </a>
+	</td>
 <!-- CONTRIBUTOR -->
 	<td align="center">
 		<a href="https://github.com/edlowther"><img src="https://avatars1.githubusercontent.com/u/7374954?v=4?s=100" width="100px;" alt=""/>
@@ -59,6 +81,16 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 		</a>
 			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=mxochicale" title="Code">💻</a> 
 			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=mxochicale" title="Research and Documentation">📖  🔧 🔬 🤔 🔧 </a>
+	</td>
+	<!-- CONTRIBUTOR -->
+	<td align="center">
+		<a href="https://github.com/dpshelio"><img src="https://avatars1.githubusercontent.com/u/963242?v=4?s=100" width="100px;" alt=""/>
+			<br />
+			<sub><b>David Pérez-Suárez</b></sub>          
+			<br />
+		</a>
+			<a href="https://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=dpshelio" title="Code">💻</a> 
+			<a href="ttps://github.com/LearnToDiscover/Case_Studies_L2D/commits?author=dpshelio" title="Research and Documentation">📖  🔧 🔬 🤔 🔧 </a>
 	</td>
 	<!-- CONTRIBUTOR -->
 	<td align="center">
