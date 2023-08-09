@@ -32,7 +32,7 @@ class LT_agent():
 
     def policy(self, state, explore_rate):
         '''
-        chooses an action based on the agents value function and the current explore rate
+        chooses an action based on the agent's value function and the current explore rate
         :param state: the current state given by the environment
         :param explore_rate: the chance of taking a random action
         :return: the action to be taken
