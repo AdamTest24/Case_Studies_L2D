@@ -1,0 +1,5 @@
+env
+*.DS_Store
+*ipynb_checkpoints
+*__pycache__
+reinforcement_learning_Neythen/Session1-RL_intro/~$Lecture1_RL-intro.pptx
