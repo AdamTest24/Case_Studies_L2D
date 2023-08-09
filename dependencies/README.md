@@ -1,26 +1,37 @@
 # Creating virtual environments
 
-## Conda
-Install [conda](https://github.com/mxochicale/code/tree/main/conda) and create [ve.yml](ve.yml).
+## Conda, virtual environment and its python-based dependencies 
+You might need to install [conda](https://github.com/mxochicale/code/tree/main/conda) and create [ve.yml](ve.yml).
 
-## Dependencies
-
-* Python package versions
-```
-$ cd $HOME/.../dependencies
-$ conda activate ve
-$ python package_versions.py 
-
-
-
-python: 3.11.4 | packaged by conda-forge | (main, Jun 10 2023, 18:08:17) [GCC 12.2.0]
-torch: 2.0.0.post200
-torch cuda_is_available: True
-torch cuda version: 11.2
-torch cuda.device_count  1
-PIL: 9.5.0
+* Some commands to manage your conda environment.
+See this [conda cheatsheet](https://docs.conda.io/projects/conda/en/latest/_downloads/843d9e0198f2a193a3484886fa28163c/conda-cheatsheet.pdf) for further commands.
+``` 
+conda update -n base -c defaults conda  ## UPDATE CONDA
+conda list -n *VE # show list of installed packages
+conda env create -f *ve.yml   		    ## INSTALL
+conda env update -f *ve.yml --prune  	## UPDATE
+conda activate *VE			    ## ACTIVATE
+conda remove -n *VE --all   ## REMOVE
 ```
 
+* Quick test for the availability of cuda in your machine.
+```
+conda activate l2dVE
+python
+import torch
+torch.cuda.is_available()
+```
+
+## Launch jupyter notebook
+``` 
+cd $HOME/../notebooks
+conda activate l2dVE && jupyter notebook --browser=firefox
+```
+
+## Our code have been tested in the following machines:
+
+
+### Ubuntu 22.04.1 LTS with NVIDIA RTX A2000 8GB Laptop GPU
 * OS
 ```
 $ hostnamectl

@@ -1,30 +1,9 @@
-## USAGE
-## cd ../dependencies
-## conda update -n base -c defaults conda  ## UPDATE CONDA
-## conda list -n *VE # show list of installed packages
-## conda env create -f *ve.yml   		    ## INSTALL
-## conda env update -f *ve.yml --prune  	## UPDATE
-## conda activate *VE			    ## ACTIVATE
-## conda remove -n *VE --all   ## REMOVE
-
-## QUICK TEST OF THE AVAILABILITY OF CUDA
-## conda activate *VE
-## python
-## import torch
-## torch.cuda.is_available()
-##
-## Alternatively
-## conda activate *VE
-## python packages_versions.py
-
 name: l2dVE
 channels:
-  #- pytorch # https://anaconda.org/pytorch/torchvision
-  #- nvidia
   - conda-forge
 dependencies:
   - pytorch
-  - python #WORKS for 3.11 and 3.10
+  - python
   - torchvision
   #- torchinfo
   #- cudatoolkit
@@ -32,12 +11,11 @@ dependencies:
   - pip:
     - numpy
     - matplotlib
-    #- opencv-python
-    #- wandb
-    #- tqdm
     - notebook
     - jupyter
-    #- seaborn 
+    #- wandb
+    #- tqdm
+    #- seaborn
     #- scikit-image
     #- nibabel
     #- pillow
