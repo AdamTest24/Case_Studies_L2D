@@ -14,11 +14,14 @@
 2. Select repository, branch, Region and machine type (8-core [32GBRAM 64GB] if it is available)
 3. Press `Ctrl+Shit+p` to select `Add Dev Container`> `Create a new env` > Anaconda (python3) > Conda, Mamba (Miniforge) > Keep Defaul
 5. Open one of the notebooks `deep_leaarning_mab>1-Intro-dl_MLPs.ipynb`
-6. Click the `Select kernel` button in the upper-right and select `Install and ` > `base Python (opt/conda/bin/python)`
+6. Click the `Select kernel` button in the upper-right and select `Install and Enable suggested extensions` > `Python Env` > `base Python (opt/conda/bin/python)`
 7. Have fun! 🚀
 
 #### Using ready codespace 
-1. Open code space: 
+1. Open codespace: https://turbo-waffle-v6vxpj5p6q62x4pj.github.dev/
+2. Open one of the notebooks `deep_leaarning_mab>Improved_notebooks>1-Intro-dl_MLPs.ipynb`
+3. Click the `Select kernel` button in the upper-right and select `Install and Enable suggested extensions` > `Python Env` > `base Python (opt/conda/bin/python)`
+4. Have fun! 🚀
 
 
 ### In your local machine 

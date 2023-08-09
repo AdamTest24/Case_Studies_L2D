@@ -14,11 +14,11 @@ conda activate *VE			    ## ACTIVATE
 conda remove -n *VE --all   ## REMOVE
 ```
 
-* Creating env in the terminal
+* Creating virtual env in the terminal for codespace
 ```
-conda create -n l2dVE -c conda-forge # environment location: /opt/conda/envs/eVE
-pip install --upgrade pip
-pip install pytorch torchvision matplotlib
+conda update -n base pip -c conda-forge # environment location: /opt/conda/envs/eVE
+pip install ipykernel
+pip install torch torchvision matplotlib
 ```
 
 * Quick test for the availability of cuda in your machine.

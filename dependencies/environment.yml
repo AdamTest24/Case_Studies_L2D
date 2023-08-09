@@ -2,7 +2,7 @@ name: base
 channels:
   - conda-forge
 dependencies:
-  - pytorch
+  - torch
   - python
   - torchvision
   #- torchinfo
