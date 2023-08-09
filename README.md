@@ -11,10 +11,9 @@
 
 1. Create a new  Codespace (click the button above!) using this repo. 
 2. Select repository, branch, Region and machine type (8-core [32GBRAM 64GB] if it is available)
-3. Open a terminal and do `cd dependencies && conda env update -n base -f *.yml`
 3. Press `Ctrl+Shit+p` to select `Add Dev Container`> `Create a new env` > Anaconda (python3) > Conda, Mamba (Miniforge) > Keep Defaul
-5. Open one of the notebooks
-6. Click the `Select kernel` button in the upper-right and select `Python X`
+5. Open one of the notebooks `deep_leaarning_mab>1-Intro-dl_MLPs.ipynb`
+6. Click the `Select kernel` button in the upper-right and select `Install and ` > `base Python (opt/conda/bin/python)`
 7. Have fun! 🚀
 
 ### In your local machine 
