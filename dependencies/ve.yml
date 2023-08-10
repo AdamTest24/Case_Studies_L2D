@@ -6,6 +6,7 @@ dependencies:
   - python
   - torchvision
   - gymnasium
+  - pygame
   #- torchinfo
   #- cudatoolkit
   - pip
