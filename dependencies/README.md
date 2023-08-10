@@ -4,23 +4,24 @@
 You might need to install [conda](https://github.com/mxochicale/code/tree/main/conda) and create [ve.yml](ve.yml).
 
 
-### codespace 
+### In codespace 
 * Add packages to `base`` virtual env in the terminal for codespace
 ```
-conda update -n base pip -c conda-forge # environment location: /opt/conda/envs/eVE
+conda update -n base pip -c conda-forge # environment location: /opt/conda/envs/base
 pip install ipykernel torch torchvision matplotlib
+python -c 'import torch; torch.cuda.is_available()'
 ```
 
-### local machine 
+### In your local machine 
 * Some commands to manage your conda environment.
 See this [conda cheatsheet](https://docs.conda.io/projects/conda/en/latest/_downloads/843d9e0198f2a193a3484886fa28163c/conda-cheatsheet.pdf) for further commands.
 ``` 
-conda update -n base pip -c conda-forge  ## UPDATE CONDA
-conda list -n *VE # show list of installed packages
-conda env create -f *ve.yml   		    ## INSTALL
-conda env update -f *ve.yml --prune  	## UPDATE
-conda activate *VE			    ## ACTIVATE
-conda remove -n *VE --all   ## REMOVE
+conda update -n base pip -c conda-forge  
+conda env create -f environment.yml
+conda env update -f environment.yml --prune
+conda activate l2dVE
+conda list -n l2dVE # show list of installed packages
+conda remove -n l2dVE --all
 ```
 
 
@@ -34,7 +35,7 @@ torch.cuda.is_available()
 
 ## Launch jupyter notebook
 ``` 
-cd $HOME/../notebooks
+cd path of your notebooks
 conda activate l2dVE && jupyter notebook --browser=firefox
 ```
 
