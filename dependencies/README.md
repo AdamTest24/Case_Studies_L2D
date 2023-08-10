@@ -1,7 +1,7 @@
 # Creating virtual environments
 
 ## Conda, virtual environment and its python-based dependencies 
-You might need to install [conda](https://github.com/mxochicale/code/tree/main/conda) and create [ve.yml](ve.yml).
+You might need to install [conda](https://github.com/mxochicale/code/tree/main/conda) and create [environment.yml](environment.yml).
 
 
 ### In codespace 
@@ -24,13 +24,10 @@ conda list -n l2dVE # show list of installed packages
 conda remove -n l2dVE --all
 ```
 
-
 * Quick test for the availability of cuda in your machine.
 ```
 conda activate l2dVE
-python
-import torch
-torch.cuda.is_available()
+python -c 'import torch; torch.cuda.is_available()'
 ```
 
 ## Launch jupyter notebook
@@ -40,7 +37,6 @@ conda activate l2dVE && jupyter notebook --browser=firefox
 ```
 
 ## Our code have been tested in the following machines:
-
 
 ### Ubuntu 22.04.1 LTS with NVIDIA RTX A2000 8GB Laptop GPU
 * OS
@@ -76,5 +72,3 @@ GPU 00000000:01:00.0
     Product Architecture                  : Ampere
 
 ```
-
-

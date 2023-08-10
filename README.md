@@ -25,7 +25,7 @@
 
 
 ### In your local machine 
-* Launch jupyter notebook
+Create your conda environment as suggested [here](dependencies/README.md). Then you can launch your jupyter notebooks
 ``` 
 conda activate l2dVE && jupyter notebook --browser=firefox
 ```
@@ -172,4 +172,3 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 
 This work follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.  
 Contributions of any kind welcome!
-
