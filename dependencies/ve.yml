@@ -4,9 +4,11 @@ channels:
 dependencies:
   - pytorch
   - python
+  - pandas
   - torchvision
   - gymnasium
   - pygame
+  - ipympl
   #- torchinfo
   #- cudatoolkit
   - pip
@@ -15,9 +17,9 @@ dependencies:
     - matplotlib
     - notebook
     - jupyter
+    - seaborn
     #- wandb
     #- tqdm
-    #- seaborn
     #- scikit-image
     #- nibabel
     #- pillow
