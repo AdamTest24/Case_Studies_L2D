@@ -16,6 +16,8 @@ dependencies:
     - notebook
     - jupyter
     - ipykernel # required for jupyter notebook in VS Code
+    - scikit-learn
+    - medmnist
     #- wandb
     #- tqdm
     #- seaborn
