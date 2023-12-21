@@ -1,10 +1,11 @@
 name: l2dVE
 channels:
   - conda-forge
+  - pytorch #https://anaconda.org/pytorch/pytorch
 dependencies:
-  - python==3.11.*
-  - torch
   - python
+  #- python==3.11.*
+  - pytorch
   - torchvision
   #- torchinfo
   #- cudatoolkit
