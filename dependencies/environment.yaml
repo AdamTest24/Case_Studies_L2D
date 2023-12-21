@@ -1,9 +1,11 @@
 name: l2dVE
 channels:
   - conda-forge
+  - pytorch #https://anaconda.org/pytorch/pytorch
 dependencies:
-  - pytorch
   - python
+  #- python==3.11.*
+  - pytorch
   - torchvision
   #- torchinfo
   #- cudatoolkit
@@ -13,6 +15,7 @@ dependencies:
     - matplotlib
     - notebook
     - jupyter
+    - ipykernel # required for jupyter notebook in VS Code
     #- wandb
     #- tqdm
     #- seaborn
