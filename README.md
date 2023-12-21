@@ -2,6 +2,8 @@
 
 ## :bookmark_tabs: Table of content
 1. Deep learning 
+	* Open [1-Intro_dl_MLPs.ipynb](deep_learning_mab/Improved_notebooks/1-Intro_dl_MLPs.ipynb) in GitHub.
+	* Open [Intro_dl_CNNs.ipynb](deep_learning_mab/MAB_New_Edits/Intro_dl_CNNs.ipynb) in GitHub.
 2. Reinforcement learning 
 3. Classifier for two groups of proteins
 
