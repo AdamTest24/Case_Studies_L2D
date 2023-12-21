@@ -6,29 +6,24 @@
 
 ## Getting started!
 
-### In Codespace
-[![Open in Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new?repo=LearnToDiscover/Case_Studies_L2D)
-
-#### Creation of new codespace 
-1. Create a new  Codespace (click the button above!) using this repo. 
-2. Select repository, branch, Region and machine type (8-core [32GBRAM 64GB] if it is available)
-3. (Optional) Press `Ctrl+Shit+p` to select `Add Dev Container`> `Create a new env` > Anaconda (python3) > Conda, Mamba (Miniforge) > Keep Defaul
-4. Open one of the notebooks `deep_leaarning_mab>1-Intro-dl_MLPs.ipynb`
-5. Click `Select kernel` button in the upper-right and select `Install and Enable suggested extensions` > `Python Env` > `base Python (opt/conda/bin/python)`
-6. Have fun! 🚀
-
-#### Using ready codespace 
-1. Open codespace: https://fluffy-sniffle-wr7wvq4vrprcgpwx.github.dev/
-2. Open one of the notebooks `deep_leaarning_mab>Improved_notebooks>1-Intro-dl_MLPs.ipynb`
-3. Click `Select kernel` button in the upper-right and select `Install/Enable suggested extensions (python or jupyter)` > `Python Env` > `base Python (opt/conda/bin/python)`
-4. Have fun! 🚀
-
-
 ### In your local machine 
 Create your conda environment as suggested [here](dependencies/README.md). Then you can launch your jupyter notebooks
 ``` 
 conda activate l2dVE && jupyter notebook --browser=firefox
 ```
+
+### In Codespace
+1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`
+2. You might already have an images to which case just activate docker_funny_name_ID https://github.com/codespaces/`docker_funny_name_ID`
+3. Navigate directories to open notebook in your webbrower visual studio
+4. Select Kernel (top right icon)
+5. Install enable suggested extensions Python + Jupyter
+6. Python environments
+7. Select l2dVE (Python VERSION) `/opt/conda/envs/l2dVE/bin/python`
+8. Run notebook and have fun! 🚀
+9. When you done, just stop running container (bottom left menu) and select `stop running container`
+10. Maybe go https://github.com/codespaces/ to delete your container
+
 
 ## Clone repository
 Clone the repository by typing (or copying) the following line in a terminal at your selected path in your machine.
