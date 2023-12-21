@@ -1,31 +1,29 @@
 # Creating virtual environments
 
-## Conda, virtual environment and its python-based dependencies 
-You might need to install [conda](https://github.com/mxochicale/code/tree/main/conda) and create [environment.yml](environment.yml).
-
+## Mamba, virtual environment and its python-based dependencies 
+We recommend to use mamba from [miniforge distribution](https://github.com/conda-forge/miniforge). 
+See further instructions [here](https://mamba.readthedocs.io/en/latest/installation/mamba-installation.html).
 
 ### In your local machine 
-* Some commands to manage your conda environment.
-See this [conda cheatsheet](https://docs.conda.io/projects/conda/en/latest/_downloads/843d9e0198f2a193a3484886fa28163c/conda-cheatsheet.pdf) for further commands.
 ``` 
-conda update -n base pip -c conda-forge  
-conda env create -f environment.yml
-conda env update -f environment.yml --prune
-conda activate l2dVE
-conda list -n l2dVE # show list of installed packages
-conda remove -n l2dVE --all
+mamba update -n base mamba
+mamba env create -f environment.yaml #will take 8-ish minutes depends on your connection
+#mamba env update --prune -n l2dVE -f environment.yaml # to prune your VE
+mamba activate l2dVE
+mamba list -n l2dVE # show list of installed packages
+#mamba remove -n l2dVE --all #in case you want to remove it
 ```
 
 * Quick test for the availability of cuda in your machine.
 ```
-conda activate l2dVE
+mamba activate l2dVE
 python -c 'import torch; torch.cuda.is_available()'
 ```
 
 ## Launch jupyter notebook
 ``` 
 cd path of your notebooks
-conda activate l2dVE && jupyter notebook --browser=firefox
+mamba activate l2dVE && jupyter notebook --browser=firefox
 ```
 
 ## Our code have been tested in the following machines:

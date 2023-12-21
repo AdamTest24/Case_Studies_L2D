@@ -7,9 +7,10 @@
 ## Getting started!
 
 ### In your local machine 
-Create your conda environment as suggested [here](dependencies/README.md). Then you can launch your jupyter notebooks
+Create your conda environment as suggested [here](dependencies/README.md).   
+Then you can launch your jupyter notebooks.
 ``` 
-conda activate l2dVE && jupyter notebook --browser=firefox
+mamba activate l2dVE && jupyter notebook --browser=firefox
 ```
 
 ### In Codespace
