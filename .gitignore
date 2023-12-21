@@ -4,6 +4,8 @@
 
 ## ignore datapaths
 **/deep_learning_mab/Improved_notebooks/data/
+**/MNIST
+**/pathmnist.npz
 
 ## temporal __pycache__/
 **/__pycache__/

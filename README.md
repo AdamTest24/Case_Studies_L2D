@@ -2,6 +2,8 @@
 
 ## :bookmark_tabs: Table of content
 1. Deep learning 
+	* Open [1-Intro_dl_MLPs.ipynb](deep_learning_mab/Improved_notebooks/1-Intro_dl_MLPs.ipynb) in GitHub. (✅  run in codespace)   
+	* Open [Intro_dl_CNNs.ipynb](deep_learning_mab/MAB_New_Edits/Intro_dl_CNNs.ipynb) in GitHub. (✅ run in codespace)   
 2. Reinforcement learning 
 3. Classifier for two groups of proteins
 
@@ -16,7 +18,8 @@ mamba activate l2dVE && jupyter notebook --browser=firefox
 
 ### :cloud: In Codespace
 1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!    
-	1.1. You might already have an images to which case just activate `docker_funny_name_ID` https://github.com/codespaces/`docker_funny_name_ID`   
+	1.1. You might already have an images to which case just activate `docker_funny_name_ID` https://github.com/codespaces/`docker_funny_name_ID`    
+        1.2  Current codespace is configure with `2-core • 8GB RAM • 32GB` but you can choose other options (4,8,16 cores, etc)    
 2. Navigate `EXPLORER` to open relevant notebook in your webbrower visual studio   
 3. Select Kernel (top right icon)
 4. Select: `Install enable suggested extensions Python + Jupyter`
