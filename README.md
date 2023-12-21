@@ -15,9 +15,9 @@ mamba activate l2dVE && jupyter notebook --browser=firefox
 ```
 
 ### :cloud: In Codespace
-1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!
-	1.1. You might already have an images to which case just activate `docker_funny_name_ID` https://github.com/codespaces/`docker_funny_name_ID`
-2. Navigate `EXPLORER` to open relevant notebook in your webbrower visual studio
+1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!    
+	1.1. You might already have an images to which case just activate `docker_funny_name_ID` https://github.com/codespaces/`docker_funny_name_ID`   
+2. Navigate `EXPLORER` to open relevant notebook in your webbrower visual studio   
 3. Select Kernel (top right icon)
 4. Select: `Install enable suggested extensions Python + Jupyter`
 5. Select: `Python environments...`
