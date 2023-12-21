@@ -3,6 +3,7 @@
 ## :bookmark_tabs: Table of content
 1. Deep learning 
 2. Reinforcement learning 
+3. Classifier for two groups of proteins
 
 ## :star2: Getting started!
 
@@ -14,16 +15,17 @@ mamba activate l2dVE && jupyter notebook --browser=firefox
 ```
 
 ### :cloud: In Codespace
-1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`
-2. You might already have an images to which case just activate docker_funny_name_ID https://github.com/codespaces/`docker_funny_name_ID`
-3. Navigate directories to open notebook in your webbrower visual studio
-4. Select Kernel (top right icon)
-5. Install enable suggested extensions Python + Jupyter
-6. Python environments
-7. Select l2dVE (Python VERSION) `/opt/conda/envs/l2dVE/bin/python`
-8. Run notebook and have fun! 🚀
-9. When you done, just stop running container (bottom left menu) and select `stop running container`
-10. Maybe go https://github.com/codespaces/ to delete your container
+1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!
+	1.1. You might already have an images to which case just activate `docker_funny_name_ID` https://github.com/codespaces/`docker_funny_name_ID`
+2. Navigate `EXPLORER` to open relevant notebook in your webbrower visual studio
+3. Select Kernel (top right icon)
+4. Select: `Install enable suggested extensions Python + Jupyter`
+5. Select: `Python environments...`
+6. Select: `l2dVE (Python VERSION) /opt/conda/envs/l2dVE/bin/python`
+7. Run cells in notebook and have fun! 🚀
+8. You might like to commit changes to which we suggest respective branches to avoid conflicts with the `main` branch
+9. When you done, just stop running container (bottom left menu `Codespaces: funny_name_ID`) and select `stop running container`
+10. You might like to go to https://github.com/codespaces/ to delete your container `docker_funny_name_ID` by clicking in three dots and delete it
 
 
 ## :octocat: Clone repository
