@@ -18,17 +18,18 @@ mamba activate l2dVE && jupyter notebook --browser=firefox
 
 ### :cloud: In Codespace
 1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!    
-	1.1. You might already have an images to which case just activate `docker_funny_name_ID` https://github.com/codespaces/`docker_funny_name_ID`    
-        1.2  Current codespace is configure with `2-core • 8GB RAM • 32GB` but you can choose other options (4,8,16 cores, etc)    
-2. Navigate `EXPLORER` to open relevant notebook in your webbrower visual studio   
-3. Select Kernel (top right icon)
-4. Select: `Install enable suggested extensions Python + Jupyter`
-5. Select: `Python environments...`
-6. Select: `l2dVE (Python VERSION) /opt/conda/envs/l2dVE/bin/python`
-7. Run cells in notebook and have fun! 🚀
-8. You might like to commit changes to which we suggest respective branches to avoid conflicts with the `main` branch
-9. When you done, just stop running container (bottom left menu `Codespaces: funny_name_ID`) and select `stop running container`
-10. You might like to go to https://github.com/codespaces/ to delete your container `docker_funny_name_ID` by clicking in three dots and delete it
+	1.1 You might already have an image, in which case just activate `docker_funny_name_ID` at https://github.com/codespaces    
+	1.2 The default codespace is configured with `2-core • 8GB RAM • 32GB` but you can choose other options (4, 8, 16 cores, etc)    
+	1.3 Once the setup is complete, a Visual Studio Code IDE will show up on your browser
+3. In the `EXPLORER` panel to the left, open the relevant notebook   
+4. In the notebook view, on the top right, click on `Select Kernel`
+5. Select: `Install enable suggested extensions Python + Jupyter`
+6. Select: `Python environments...`
+7. Select: `l2dVE (Python VERSION) /opt/conda/envs/l2dVE/bin/python`
+8. Run cells in notebook and have fun! 🚀
+9. You might like to commit changes. For this we suggest creating specific branches to avoid conflicts with the `main` branch
+10. When you are done, just stop running the container. Click on the bottom left menu `Codespaces: funny_name_ID`, select `Stop Current Codebase`
+11. You might like to go to https://github.com/codespaces/ to delete your container `docker_funny_name_ID` by clicking in three dots and delete it
 
 
 ## :octocat: Clone repository
