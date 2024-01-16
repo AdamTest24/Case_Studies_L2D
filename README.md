@@ -16,7 +16,7 @@ Then you can launch your jupyter notebooks.
 mamba activate l2dVE && jupyter notebook --browser=firefox
 ```
 
-### :cloud: In Codespace
+### :cloud: Using Github Codespaces
 1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!    
 	1.1 You might already have an image, in which case just activate `docker_funny_name_ID` at https://github.com/codespaces    
 	1.2 The default codespace is configured with `2-core • 8GB RAM • 32GB` but you can choose other options (4, 8, 16 cores, etc)    
@@ -30,6 +30,12 @@ mamba activate l2dVE && jupyter notebook --browser=firefox
 9. You might like to commit changes. For this we suggest creating specific branches to avoid conflicts with the `main` branch
 10. When you are done, just stop running the container. Click on the bottom left menu `Codespaces: funny_name_ID`, select `Stop Current Codebase`
 11. You might like to go to https://github.com/codespaces/ to delete your container `docker_funny_name_ID` by clicking in three dots and delete it
+
+Alternatively, you can open the notebook you would like to run on Github and click on the codespace badge (which looks like this ![badge icon](https://github.com/codespaces/badge.svg)) at the top. Then fill in the setup parameters on the browser:
+- Select the branch you would like to use 
+- Select the Dev container configuration (Miniconda Python 3)
+- The defaults for the region and machine type should work fine for us!
+Then continue with the setup from step 2 above.
 
 
 ## :octocat: Clone repository
