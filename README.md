@@ -17,19 +17,27 @@ mamba activate l2dVE && jupyter notebook --browser=firefox
 ```
 
 ### :cloud: Using Github Codespaces
-1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!    
-	1.1 You might already have an image, in which case just activate `docker_funny_name_ID` at https://github.com/codespaces    
-	1.2 The default codespace is configured with `2-core • 8GB RAM • 32GB` but you can choose other options (4, 8, 16 cores, etc)    
+1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!
+
+	1.1 You might already have an image, in which case just activate `docker_funny_name_ID` at https://github.com/codespaces
+
+	1.2 The default codespace is configured with `2-core • 8GB RAM • 32GB` but you can choose other options (4, 8, 16 cores, etc)
+
 	1.3 Once the setup is complete, a Visual Studio Code IDE will show up on your browser
-3. In the `EXPLORER` panel to the left, open the relevant notebook   
-4. In the notebook view, on the top right, click on `Select Kernel`
-5. Select: `Install enable suggested extensions Python + Jupyter`
-6. Select: `Python environments...`
-7. Select: `l2dVE (Python VERSION) /opt/conda/envs/l2dVE/bin/python`
-8. Run cells in notebook and have fun! 🚀
-9. You might like to commit changes. For this we suggest creating specific branches to avoid conflicts with the `main` branch
-10. When you are done, just stop running the container. Click on the bottom left menu `Codespaces: funny_name_ID`, select `Stop Current Codebase`
-11. You might like to go to https://github.com/codespaces/ to delete your container `docker_funny_name_ID` by clicking in three dots and delete it
+
+2. In the `EXPLORER` panel to the left, open the relevant notebook   
+3. In the notebook view, on the top right, click on `Select Kernel`
+
+	3.1 From the drop down menu in the top centre, select: `Install enable suggested extensions Python + Jupyter`
+
+	3.2 Select: `Python environments...` (you may have to click on `Select Kernel` again)
+
+	3.3 From the drop down menu, select: `l2dVE (Python VERSION) /opt/conda/envs/l2dVE/bin/python`
+
+4. Run cells in notebook and have fun! 🚀
+5. You might like to commit changes. For this we suggest creating specific branches to avoid conflicts with the `main` branch
+6. When you are done, just stop running the container. Click on the bottom left menu `Codespaces: funny_name_ID`, select `Stop Current Codebase`
+7. You might like to go to https://github.com/codespaces/ to delete your container `docker_funny_name_ID` by clicking in three dots and delete it
 
 Alternatively, you can open the notebook you would like to run on Github and click on the codespace badge (which looks like this ![badge icon](https://github.com/codespaces/badge.svg)) at the top. Then fill in the setup parameters on the browser:
 - Select the branch you would like to use 
