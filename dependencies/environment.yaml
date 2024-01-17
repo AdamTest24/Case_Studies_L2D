@@ -1,14 +1,11 @@
 name: l2dVE
 channels:
   - conda-forge
-  - pytorch #https://anaconda.org/pytorch/pytorch
+  - pytorch
 dependencies:
   - python
-  #- python==3.11.*
   - pytorch
   - torchvision
-  #- torchinfo
-  #- cudatoolkit
   - pip
   - pip:
     - numpy
@@ -19,11 +16,3 @@ dependencies:
     - scikit-learn
     - medmnist
     - seaborn
-    #- wandb
-    #- tqdm
-    #- scikit-image
-    #- nibabel
-    #- pillow
-    #- datasets
-    #- torchmetrics
-    #- accelerate
