@@ -32,9 +32,11 @@
 				"python.defaultInterpreterPath": "/opt/conda/envs/l2dVE"
 			},
 			"extensions": [
-				"ms-python.python",
-				// "donjayamanne.python-extension-pack",
+				// Build container with python and jupyter pre-installed to streamline user experience
+				// for running notebooks:
+				"ms-python.python", 
 				"ms-toolsai.jupyter",
+				// "donjayamanne.python-extension-pack",
 				// "GitHub.codespaces",
 				// "ms-azuretools.vscode-docker",
 				// "UserName.vscode-markdownlint"
