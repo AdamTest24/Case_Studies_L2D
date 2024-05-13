@@ -19,4 +19,4 @@ dependencies:
     - seaborn
     - gymnasium[toy-text]
     - ipympl
-prefix: /opt/anaconda3/envs/l2dVE
+prefix: /opt/conda/envs/l2dVE
