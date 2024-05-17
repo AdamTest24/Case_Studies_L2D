@@ -9,11 +9,6 @@
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
-        "features": {
-           "ghcr.io/devcontainers/features/nvidia-cuda:1": {
-           "installCudnn": true
-        }
-        },
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
@@ -47,5 +42,10 @@
 				// "UserName.vscode-markdownlint"
 			]
 		}
-	}
+	},
+        "features": {
+           "ghcr.io/devcontainers/features/nvidia-cuda:1": {
+           "installCudnn": true
+        }
+        }
 }
