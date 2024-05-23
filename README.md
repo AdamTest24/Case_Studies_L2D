@@ -19,32 +19,28 @@ mamba activate l2dVE && jupyter notebook --browser=firefox
 ```
 
 ### :cloud: Using Github Codespaces
-1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!
+[Codespaces](https://docs.github.com/en/codespaces/overview) is a development environment hosted in the cloud. 
+We have created a config file, [devcontainer.json](devcontainer/devcontainer.json) that currently sopports `2-core • 8GB RAM • 32GB` and added NVIDIA CUDA features, however the GPU option is only available for selected customers as trial period [:link:](https://docs.github.com/en/enterprise-cloud@latest/codespaces/developing-in-a-codespace/getting-started-with-github-codespaces-for-machine-learning).
 
-	1.1 You might already have an image, in which case just activate `docker_funny_name_ID` at https://github.com/codespaces
-
-	1.2 The default codespace is configured with `2-core • 8GB RAM • 32GB` but you can choose other options (4, 8, 16 cores, etc)
-
-	1.3 Once the setup is complete, a Visual Studio Code IDE will show up on your browser
-
-2. In the `EXPLORER` panel to the left, open the relevant notebook   
-3. In the notebook view, on the top right, click on `Select Kernel`
-
-	3.1 Select: `Python environments...` (you may have to click on `Select Kernel` again)
-
-	3.2 From the drop down menu, select: `l2dVE (Python VERSION) /opt/conda/envs/l2dVE/bin/python`
-
-4. Run cells in notebook and have fun! 🚀
-5. You might like to commit changes. For this we suggest creating specific branches to avoid conflicts with the `main` branch
-6. When you are done, just stop running the container. Click on the bottom left menu `Codespaces: funny_name_ID`, select `Stop Current Codebase`
-7. You might like to go to https://github.com/codespaces/ to delete your container `docker_funny_name_ID` by clicking in three dots and delete it
+1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!  
+	1.1 You might already have an image, in which case just activate `docker_funny_name_ID` at https://github.com/codespaces    
+	1.2 The default codespace is configured with `2-core • 8GB RAM • 32GB` but you can choose other options (4, 8, 16 cores, etc)  
+	1.3 Once the setup is complete, a Visual Studio Code IDE will show up on your browser     
+2. In the `EXPLORER` panel to the left, open the relevant notebook     
+3. In the notebook view, on the top right, click on `Select Kernel`  
+	3.1 From the drop down menu in the top centre, select: `Install enable suggested extensions Python + Jupyter`    
+	3.2 Select: `Python environments...` (you may have to click on `Select Kernel` again)    
+	3.3 From the drop down menu, select: `l2dVE (Python VERSION) /opt/conda/envs/l2dVE/bin/python`    
+4. Run cells in notebook and have fun! 🚀  
+5. You might like to commit changes. For this we suggest creating specific branches to avoid conflicts with the `main` branch   
+6. When you are done, just stop running the container. Click on the bottom left menu `Codespaces: funny_name_ID`, select `Stop Current Codebase`  
+7. You might like to go to https://github.com/codespaces/ to delete your container `docker_funny_name_ID` by clicking in three dots and delete it  
 
 Alternatively, you can open the notebook you would like to run on Github and click on the codespace badge (which looks like this ![badge icon](https://github.com/codespaces/badge.svg)) at the top. Then fill in the setup parameters on the browser:
 - Select the branch you would like to use 
 - Select the Dev container configuration (Miniconda Python 3)
 - The defaults for the region and machine type should work fine for us!
 Then continue with the setup from step 2 above.
-
 
 ## :octocat: Clone repository
 Clone the repository by typing (or copying) the following line in a terminal at your selected path in your machine.
