@@ -15,7 +15,7 @@
 Create your conda environment as suggested [here](dependencies/README.md).   
 Then you can launch your jupyter notebooks.
 ``` 
-mamba activate l2dVE && jupyter notebook --browser=firefox
+conda activate l2dVE && jupyter notebook --browser=firefox
 ```
 
 ### :cloud: Getting Started with Github Codespaces
