@@ -20,7 +20,7 @@ mamba activate l2dVE && jupyter notebook --browser=firefox
 
 ### :cloud: Using Github Codespaces
 [Codespaces](https://docs.github.com/en/codespaces/overview) is a development environment hosted in the cloud. 
-We have created a config file, [devcontainer.json](devcontainer/devcontainer.json) that currently sopports `2-core • 8GB RAM • 32GB` and added NVIDIA CUDA features, however the GPU option is only available for selected customers as trial period [:link:](https://docs.github.com/en/enterprise-cloud@latest/codespaces/developing-in-a-codespace/getting-started-with-github-codespaces-for-machine-learning).
+We have created a config file, [devcontainer.json](devcontainer/devcontainer.json) that currently sopports `2-core • 8GB RAM • 32GB` and added [NVIDIA CUDA features](https://github.com/devcontainers/features/pkgs/container/features%2Fnvidia-cuda), however the GPU option is only available for selected customers as trial period [:link:](https://docs.github.com/en/enterprise-cloud@latest/codespaces/developing-in-a-codespace/getting-started-with-github-codespaces-for-machine-learning).
 
 1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!  
 	1.1 You might already have an image, in which case just activate `docker_funny_name_ID` at https://github.com/codespaces    
