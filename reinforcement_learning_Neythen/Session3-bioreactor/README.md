@@ -6,11 +6,3 @@
 conda activate l2dVE && jupyter notebook --browser=firefox
 ```
 
-## Notes
-```
-agent = DQN_agent(env, n_states, n_actions)
-# Taking 30-ish minutes; start 11:40, finish 12:09
-```
-
-
-
