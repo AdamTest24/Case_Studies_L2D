@@ -17,11 +17,19 @@
 # Session 2: Deep reinforcement learning
 # 
 # ## 1. Introduciton 
-# In this notebook, we demonstrate the key parts of a DQN agent and then apply that to the maximisation of the product output of a microbial co-culture growing in a bioreactor. For full details of the concepts behind this demo, please see [deep reinforcement learning for the control of microbial co-cultures in bioreactors (Treloar et al, 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007783).
+# In this notebook, we demonstrate the key parts of a DQN agent and then apply 
+# that to the maximisation of the product output of a microbial co-culture growing in a bioreactor. 
+# For full details of the concepts behind this demo, 
+# please see [deep reinforcement learning for the control of microbial co-cultures in bioreactors 
+# (Treloar et al, 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007783).
 # 
-# Notes. For `DQN_agent()` The configuration variables are similar to those from the session two notebook, with one exception - we introduce `TAU` to enable us to perform soft updates on the parameters of the $ Q_{target} $ network, so that they shift towards the $Q$ network parameters incrementally rather than duplicate them at a single time step. We're also changing the effect of the `UPDATE_EVERY` variable - this now becomes the frequency with which we perform both the gradient descent step on the $Q$ network parameters and the soft update of the $Q_{target}$ parameters. 
-# 
-# 
+# Notes. 
+# For `DQN_agent()` The configuration variables are similar to those from the session two notebook, 
+# with one exception - we introduce `TAU` to enable us to perform soft updates on the parameters of the $ Q_{target} $ network, 
+# so that they shift towards the $Q$ network parameters incrementally rather than duplicate them at a single time step. 
+# We're also changing the effect of the `UPDATE_EVERY` variable - this now becomes the frequency with which we perform both 
+# the gradient descent step on the $Q$ network parameters and the soft update of the $Q_{target}$ parameters. 
+
 
 ## Install dependencies
 import nvidia_smi
