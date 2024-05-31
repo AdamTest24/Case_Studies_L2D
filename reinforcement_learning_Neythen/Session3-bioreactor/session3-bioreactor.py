@@ -88,6 +88,7 @@ def check_host_resources():
         #print(f'GPU-{i}: GPU-Memory: {info.used}/{info.total} MB')
 
     #CODESPACES /bin/bash: line 1: nvidia-smi: command not found
+      #OSError: libnvidia-ml.so.1: cannot open shared object file: No such file or directory
     #MX_HOST_MACHINE: NVIDIA RTX A200 8192MiB
 
 #check_host_resources()
@@ -629,6 +630,7 @@ print(f'---------------------------------')
 print(f'Execution time (minutes): {(end_time - current_time)/60}')
 #logs
 ##Execution time (mins): 0.4359638055165609 with n_episodes 20 in MX_HOST_MACHINE: 33.3G RAM, NVIDIA RTX A200 8192MiB
+##Execution time (mins): 0.3237577478090922 with n_episodes 20 in CODESPACES  2-core • 8GB RAM • 32GB HD
 
 explore_rates = [
     agent.get_explore_rate(episode, 1.5) for episode in range(1, n_episodes+1)

@@ -4,9 +4,15 @@
 1. Deep learning 
 	* Open [1-Intro_dl_MLPs.ipynb](deep_learning_mab/Improved_notebooks/1-Intro_dl_MLPs.ipynb) in GitHub. (✅  run in codespace)   
 	* Open [Intro_dl_CNNs.ipynb](deep_learning_mab/MAB_New_Edits/Intro_dl_CNNs.ipynb) in GitHub. (✅ run in codespace)   
+<<<<<<< HEAD
 2. Reinforcement learning 
 	* Open [session1-tabular.ipynb](reinforcement_learning_Neythen/updated-notebooks/session1-tabular.ipynb) in GitHub. (✅  run in codespace)
 	* Open [session2-deep.ipynb](reinforcement_learning_Neythen/updated-notebooks/session2-deep.ipynb) in GitHub. (✅  run in codespace)
+=======
+2. Reinforcement learning
+	* Open [session3-bioreactor.py](reinforcement_learning_Neythen/Session3-bioreactor/session3-bioreactor.py) in GitHub. (✅ run in codespace)
+	* Open [session3-bioreactor.ipynb](reinforcement_learning_Neythen/Session3-bioreactor/session3-bioreactor.ipynb) in GitHub. (✅ run in codespace)
+>>>>>>> a5038d1 (adds links for scripts of session3-bioreactor main README and test them in ✅ codespaces; removes figs and gitignore them #29)
 3. Classifier for two groups of proteins
 
 ## :star2: Getting started!
