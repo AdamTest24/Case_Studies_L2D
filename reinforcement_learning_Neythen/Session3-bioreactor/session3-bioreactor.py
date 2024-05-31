@@ -49,43 +49,48 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
-
-## Setting and checking device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(device)
 
-## Checking resources (GPU and Memory)
-from psutil import virtual_memory
-ram_gb = virtual_memory().total / 1e9
-print('Your runtime has {:.1f} gigabytes of available RAM\n'.format(ram_gb))
-# CODESPACES: Your runtime has 8.3 gigabytes of available RAM
-# MX_HOST_MACHINE: Your runtime has 33.3 gigabytes of available RAM
 
-_GPU = False
-_NUMBER_OF_GPU = 0
+def check_host_resources():
+    """
+    Checking RAM and GPU resources
+    """
+    ## Setting and checking device
+    ## Checking resources (GPU and Memory)
+    from psutil import virtual_memory
+    ram_gb = virtual_memory().total / 1e9
+    print('Your runtime has {:.1f} gigabytes of available RAM\n'.format(ram_gb))
+    # CODESPACES: Your runtime has 8.3 gigabytes of available RAM
+    # MX_HOST_MACHINE: Your runtime has 33.3 gigabytes of available RAM
 
-#def _check_gpu():
-#    global _GPU
-#    global _NUMBER_OF_GPU
-nvidia_smi.nvmlInit()
-_NUMBER_OF_GPU = nvidia_smi.nvmlDeviceGetCount()
-if _NUMBER_OF_GPU > 0:
-	_GPU = True
+    _GPU = False
+    _NUMBER_OF_GPU = 0
 
-print(_GPU)
+    #def _check_gpu():
+    #    global _GPU
+    #    global _NUMBER_OF_GPU
+    nvidia_smi.nvmlInit()
+    _NUMBER_OF_GPU = nvidia_smi.nvmlDeviceGetCount()
+    if _NUMBER_OF_GPU > 0:
+        _GPU = True
 
-def _bytes_to_megabytes(bytes):
-    return round((bytes/1024)/1024,2)
+    print(f'GPU = {_GPU}')
 
-for i in range(_NUMBER_OF_GPU):
-	handle = nvidia_smi.nvmlDeviceGetHandleByIndex(i)
-	info = nvidia_smi.nvmlDeviceGetMemoryInfo(handle)
-	print(f'GPU-{i}: GPU-Memory: {_bytes_to_megabytes(info.used)} used /{_bytes_to_megabytes(info.total)} total [MB]')
-	#print(f'GPU-{i}: GPU-Memory: {info.used}/{info.total} MB')
+    def _bytes_to_megabytes(bytes):
+        return round((bytes/1024)/1024,2)
 
-#CODESPACES /bin/bash: line 1: nvidia-smi: command not found
-#MX_HOST_MACHINE: NVIDIA RTX A200 8192MiB
+    for i in range(_NUMBER_OF_GPU):
+        handle = nvidia_smi.nvmlDeviceGetHandleByIndex(i)
+        info = nvidia_smi.nvmlDeviceGetMemoryInfo(handle)
+        print(f'GPU-{i}: GPU-Memory: \
+               {_bytes_to_megabytes(info.used)} used /{_bytes_to_megabytes(info.total)} total [MB]')
+        #print(f'GPU-{i}: GPU-Memory: {info.used}/{info.total} MB')
 
+    #CODESPACES /bin/bash: line 1: nvidia-smi: command not found
+    #MX_HOST_MACHINE: NVIDIA RTX A200 8192MiB
+
+#check_host_resources()
 
 class QNetwork(nn.Module):
     """Represent the agent's policy model"""
@@ -342,7 +347,6 @@ class DQN_agent():
         return returns
     
 
-
 class BioreactorEnv():
     '''
     Chemostat environment that can handle an arbitrary number of bacterial strains where all are being controlled
@@ -360,14 +364,16 @@ class BioreactorEnv():
         '''
         Parameters:
             xdot: array of the derivatives for all state variables
-            reward_func: python function used to coaculate reward: reward = reward_func(state, action, next_state)
+            reward_func: function to calculate reward: reward = reward_func(state, action, next_state)
             sampling_time: time between sampl-and-hold intervals
             num_controlled_species: 2
-            initial_x: the initial state
-            max_t: 144
+            initial_x: the initial state (e.g., shape array (8,))
+            max_t: maximum number of timesteps per episode
             n_states = 10
             n_actions = 2
-            continuous_s = False
+            continuous_s=
+			True:  get_state self.xs[-1][0:self.num_controlled_species]/100000
+			False: get_state = self.pop_to_state(self.xs[-1][0:self.num_controlled_species])
         Returns:
             env returns populations/scaling to agent
         References:
@@ -393,7 +399,7 @@ class BioreactorEnv():
     
     def step(self, action):
         '''
-        Performs one sampling and hold interval using the action provided by a reinforcment leraning agent
+        Performs one sampling and hold interval using the action provided by a reinforcment learning agent
 
         Parameters:
             action: action chosen by agent
@@ -413,8 +419,8 @@ class BioreactorEnv():
         ts = [0, self.sampling_time]
         sol = odeint(self.xdot, self.xs[-1], ts, args=(u,))[1:]
         self.xs.append(sol[-1,:])
-        self.state = self.get_state()
-        reward, done = self.reward_func(self.xs[-1])
+        self.state = self.get_state() #scaled bacterial populations
+        reward, done = self.reward_func(self.xs[-1]) #reward func with last appended sol from 0 to max_t
         
         if len(self.xs) == self.max_t:
             done = True
@@ -423,19 +429,15 @@ class BioreactorEnv():
 
     def action_to_u(self,action):
         '''
-        Takes a discrete action index and returns the corresponding continuous state
-        vector
+        Takes a discrete action index and returns the corresponding continuous state vector
 
         Paremeters:
             action: the descrete action
             num_species: the number of bacterial populations
-            num_Cin_states: the number of action states the agent can choose from
-                for each species
-            Cin_bounds: list of the upper and lower bounds of the Cin states that
-                can be chosen
+            num_Cin_states: the number of action states the agent can choose from for each species
+            Cin_bounds: list of the upper and lower bounds of the Cin states that can be chosen
         Returns:
-            state: the continuous Cin concentrations correspoding to the chosen
-                action
+            state: the continuous Cin concentrations correspoding to the chosen action
         '''
 
         # calculate which bucket each eaction belongs in
@@ -447,7 +449,6 @@ class BioreactorEnv():
             u.append(self.u_bounds[0] + r*(self.u_bounds[1]-self.u_bounds[0])/(self.u_disc-1))
 
         u = np.array(u).reshape(self.num_controlled_species,)
-
         return np.clip(u, self.u_bounds[0], self.u_bounds[1])
 
 
@@ -456,25 +457,23 @@ class BioreactorEnv():
         Gets the state (scaled bacterial populations) to be observed by the agent
 
         Returns:
-            scaled bacterial populations
+            scaled bacterial populations (1/100000). E.g.,:`[0.26154319 0.2205354 ]`
         '''
-        if not self.continuous_s:
-            return self.pop_to_state(self.xs[-1][0:self.num_controlled_species])
-        else:
+        if self.continuous_s:
             return self.xs[-1][0:self.num_controlled_species]/100000
+        else:
+            return self.pop_to_state(self.xs[-1][0:self.num_controlled_species])
 
     
     def pop_to_state(self, N):
         '''
         discritises the population of bacteria to a state suitable for the agent
+
         :param N: population
         :return: discitised population
         '''
         step = (self.N_bounds[1] - self.N_bounds[0])/self.N_disc
-
         N = np.clip(N, self.N_bounds[0], self.N_bounds[1]-1)
-
-
         return np.ravel_multi_index((N//step).astype(np.int32), [self.N_disc]*self.num_controlled_species)
 
     def reset(self, initial_x = None):
@@ -494,6 +493,13 @@ class BioreactorEnv():
         self.us = []
         return (self.get_state(),1)
 
+
+
+
+
+
+## Setting up BioreactorEnv
+current_time = time.time()
 
 
 def monod(C, C0, umax, Km, Km0):
@@ -521,7 +527,7 @@ def xdot_product(x, t, u):
     Calculates and returns derivatives for the numerical solver odeint
 
     Parameters:
-        x: current state (xdot.shape = (8,))
+        x: current state (e.g., xdot.shape = (8,))
         t: current time
         u: array of the concentrations of the auxotrophic nutrients and the common carbon source
         #num_species: the number of bacterial populations
@@ -570,14 +576,13 @@ def xdot_product(x, t, u):
 
 
 
-def reward_f(x):
-    '''
+def reward_function(x):
+    """
     caluclates the reward based on the rate of product output
     :param x:
     :return:
-    '''
+    """
     P = x[-1]
-
 
     if x[0] < 1000 or x[1] < 1000:
         reward = -1
@@ -590,21 +595,23 @@ def reward_f(x):
 
 
 
-current_time = time.time()
-
-## Setting up BioreactorEnv
 num_controlled_species = 2
 sampling_time = 10  # minutes
 t_steps = int((24 * 60) / sampling_time)  # set this to 24 hours
 initial_x = np.array([20000, 30000, 0., 0., 1., 0., 0., 0.]) # the initial state
 
-## Initalise the chemostat environment
+n_states_env = 2
+n_actions_env = 4
+
+## Setting uo chemostat environment
 env = BioreactorEnv(xdot_product, 
-                    reward_f, 
+                    reward_function, 
                     sampling_time,
                     num_controlled_species, 
                     initial_x, 
                     t_steps, 
+                    #n_states_env, #default: n_states = 10, 
+                    #n_actions_env, #default: n_actions = 2, 
                     continuous_s = True)  
 
 ## Setting up DQN_agent
@@ -617,21 +624,18 @@ n_episodes = 20
 ## Train DQN_agent
 returns = agent.train(n_episodes)
 
-
 end_time = time.time()
 print(f'---------------------------------')
 print(f'Execution time (minutes): {(end_time - current_time)/60}')
-
-
+#logs
+##Execution time (mins): 0.4359638055165609 with n_episodes 20 in MX_HOST_MACHINE: 33.3G RAM, NVIDIA RTX A200 8192MiB
 
 explore_rates = [
     agent.get_explore_rate(episode, 1.5) for episode in range(1, n_episodes+1)
 ]
 
-
-
+## Plotting and Saving plots
 fig, ax1 = plt.subplots()
-
 plt.plot(returns, label='Return')
 explore_rates = [agent.get_explore_rate(episode, n_episodes / 11) for episode in range(1, n_episodes+1)]
 ax1.set_ylabel('Return')
@@ -643,7 +647,8 @@ ax2.set_xlabel('Episode')
 plt.tight_layout()
 ax1.legend(loc=(0.21, 0.67))
 ax2.legend(loc=(0.6, 0.22))
-
+plt.savefig('fig-return_explore_rate.png')
+#plt.show()
 
 plt.figure()
 plt.title('Final population curve')
@@ -652,16 +657,15 @@ plt.plot(np.arange(len(env.xs)) *sampling_time, [x[1] for x in env.xs], label = 
 plt.legend()
 plt.xlabel('Time (hours)')
 plt.ylabel('Population cells/L')
+plt.savefig('fig-population_cells.png')
+#plt.show()
 
 fig, axs = plt.subplots(2,1)
 plt.title('Actions')
 axs[0].step(np.arange(len(env.us)) * sampling_time, [x[0] for x in env.us], label = '$u_1$')
 axs[1].step(np.arange(len(env.us)) * sampling_time, [x[1] for x in env.us], label = '$u_2$', color = 'orange')
-
 plt.xlabel('Time (hours)')
 plt.ylabel('$C_{in}$')
-
-plt.show()
-
-
+plt.savefig('fig-actions.png')
+#plt.show()
 
