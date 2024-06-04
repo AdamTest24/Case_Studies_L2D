@@ -5,6 +5,8 @@
 	* Open [1-Intro_dl_MLPs.ipynb](deep_learning_mab/Improved_notebooks/1-Intro_dl_MLPs.ipynb) in GitHub. (✅  run in codespace)   
 	* Open [Intro_dl_CNNs.ipynb](deep_learning_mab/MAB_New_Edits/Intro_dl_CNNs.ipynb) in GitHub. (✅ run in codespace)   
 2. Reinforcement learning 
+	* Open [session1-tabular.ipynb](reinforcement_learning_Neythen/updated-notebooks/session1-tabular.ipynb) in GitHub. (✅  run in codespace)
+	* Open [session2-deep.ipynb](reinforcement_learning_Neythen/updated-notebooks/session2-deep.ipynb) in GitHub. (✅  run in codespace)
 3. Classifier for two groups of proteins
 
 ## :star2: Getting started!
