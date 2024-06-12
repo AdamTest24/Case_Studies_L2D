@@ -30,11 +30,9 @@ mamba activate l2dVE && jupyter notebook --browser=firefox
 2. In the `EXPLORER` panel to the left, open the relevant notebook   
 3. In the notebook view, on the top right, click on `Select Kernel`
 
-	3.1 From the drop down menu in the top centre, select: `Install enable suggested extensions Python + Jupyter`
+	3.1 Select: `Python environments...` (you may have to click on `Select Kernel` again)
 
-	3.2 Select: `Python environments...` (you may have to click on `Select Kernel` again)
-
-	3.3 From the drop down menu, select: `l2dVE (Python VERSION) /opt/conda/envs/l2dVE/bin/python`
+	3.2 From the drop down menu, select: `l2dVE (Python VERSION) /opt/conda/envs/l2dVE/bin/python`
 
 4. Run cells in notebook and have fun! 🚀
 5. You might like to commit changes. For this we suggest creating specific branches to avoid conflicts with the `main` branch
