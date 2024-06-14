@@ -560,7 +560,7 @@ def xdot_product(x, t, u):
     # calculate derivatives
     dN = N * (R - q)  # q term takes account of the dilution
     dC = q * (u - C) - (1 / y) * R * N # sometimes dC.shape is (2,2)
-    dC0 = q*(0.1 - C0) - sum(1/y0[i]*R[i]*N[i] for i in range(2))
+    dC0 = q*(0.1 - C0) - sum(1/y0[i]*R[i]*N[i] for i in range(2)) # Eq1. concentration of the shared carbon source
 
     dA = N[0] - 2 * A ** 2 * B - q * A
     dB = N[1] - A ** 2 * B - q * B
