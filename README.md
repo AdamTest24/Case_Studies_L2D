@@ -1,19 +1,16 @@
 # Case Studies for Learn to Discover! :brain: > :world_map: > :robot: 
 
 ## :bookmark_tabs: Table of content
-1. Deep learning 
+1. :white_check_mark: Deep learning 
 	* Open [1-Intro_dl_MLPs.ipynb](deep_learning_mab/Improved_notebooks/1-Intro_dl_MLPs.ipynb) in GitHub. (✅  run in codespace)   
 	* Open [Intro_dl_CNNs.ipynb](deep_learning_mab/MAB_New_Edits/Intro_dl_CNNs.ipynb) in GitHub. (✅ run in codespace)   
-<<<<<<< HEAD
-2. Reinforcement learning 
+2. :white_check_mark: Reinforcement learning 
 	* Open [session1-tabular.ipynb](reinforcement_learning_Neythen/updated-notebooks/session1-tabular.ipynb) in GitHub. (✅  run in codespace)
 	* Open [session2-deep.ipynb](reinforcement_learning_Neythen/updated-notebooks/session2-deep.ipynb) in GitHub. (✅  run in codespace)
-=======
-2. Reinforcement learning
-	* Open [session3-bioreactor.py](reinforcement_learning_Neythen/Session3-bioreactor/session3-bioreactor.py) in GitHub. (✅ run in codespace)
-	* Open [session3-bioreactor.ipynb](reinforcement_learning_Neythen/Session3-bioreactor/session3-bioreactor.ipynb) in GitHub. (✅ run in codespace)
->>>>>>> a5038d1 (adds links for scripts of session3-bioreactor main README and test them in ✅ codespaces; removes figs and gitignore them #29)
-3. Classifier for two groups of proteins
+	* Open [session3-bioreactor.py](reinforcement_learning_Neythen/updated-notebooks/session3-bioreactor.py) in GitHub. (✅ run in codespace)
+	* Open [session3-bioreactor.ipynb](reinforcement_learning_Neythen/updated-notebooks/session3-bioreactor.ipynb) in GitHub. (✅ run in codespace)
+3. :warning: Classifier for two groups of proteins
+	* TODO! 
 
 ## :star2: Getting started!
 
@@ -26,7 +23,7 @@ conda activate l2dVE && jupyter notebook --browser=firefox
 
 ### :cloud: Getting Started with Github Codespaces
 [Codespaces](https://docs.github.com/en/codespaces/overview) is a development environment hosted in the cloud. 
-We have created a config file, [devcontainer.json](.devcontainer/devcontainer.json) that currently sopports `2-core • 8GB RAM • 32GB` and added [NVIDIA CUDA features](https://github.com/devcontainers/features/pkgs/container/features%2Fnvidia-cuda), however the GPU option is only available for selected customers as [trial period](https://docs.github.com/en/enterprise-cloud@latest/codespaces/developing-in-a-codespace/getting-started-with-github-codespaces-for-machine-learning).
+For this repository, we have created a config file, [devcontainer.json](.devcontainer/devcontainer.json) that currently supports `2-core • 8GB RAM • 32GB` and added [NVIDIA CUDA features](https://github.com/devcontainers/features/pkgs/container/features%2Fnvidia-cuda), however the GPU option is only available for selected customers as [trial period](https://docs.github.com/en/enterprise-cloud@latest/codespaces/developing-in-a-codespace/getting-started-with-github-codespaces-for-machine-learning).
 
 1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!  
 	1.1 You might already have an image, in which case just activate `docker_funny_name_ID` at https://github.com/codespaces    
@@ -40,7 +37,7 @@ We have created a config file, [devcontainer.json](.devcontainer/devcontainer.js
 4. Run cells in notebook and have fun! 🚀  
 5. You might like to commit changes. For this we suggest creating specific branches to avoid conflicts with the `main` branch   
 6. When you are done, just stop running the container. Click on the bottom left menu `Codespaces: funny_name_ID`, select `Stop Current Codebase`  
-7. You might like to go to https://github.com/codespaces/ to delete your container `docker_funny_name_ID` by clicking in three dots and delete it  
+7. You might like to go to https://github.com/codespaces/ to delete your container `docker_funny_name_ID` by clicking in three dots and delete it. This way you avoid wasting your 120 hours and 15GB for storage per month.
 
 Alternatively, you can open the notebook you would like to run on Github and click on the codespace badge (which looks like this ![badge icon](https://github.com/codespaces/badge.svg)) at the top. Then fill in the setup parameters on the browser:
 - Select the branch you would like to use 
