@@ -1,36 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# # Deep Q network for bioreactor optimisation
-# * Author(s) for paper and code: Neythen J. Treloar
-# * Author(s) for educational material: Miguel Xochicale
-# 
-# 
-# ## Questions
-# * How can an agent learn Chemostat environment that can handle an arbitrary number of bacterial strains?
-# 
-# ## Objectives
-# * Learn how to use Deep Q network for Chemostat environments
-# 
-# ## Prerequisites
-# Session 1: Reinforement learning with tabular value functions
-# Session 2: Deep reinforcement learning
-# 
-# ## 1. Introduciton 
-# In this notebook, we demonstrate the key parts of a DQN agent and then apply 
-# that to the maximisation of the product output of a microbial co-culture growing in a bioreactor. 
-# For full details of the concepts behind this demo, 
-# please see [deep reinforcement learning for the control of microbial co-cultures in bioreactors 
-# (Treloar et al, 2020)](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007783).
-# 
-# Notes. 
-# For `DQN_agent()` The configuration variables are similar to those from the session two notebook, 
-# with one exception - we introduce `TAU` to enable us to perform soft updates on the parameters of the $ Q_{target} $ network, 
-# so that they shift towards the $Q$ network parameters incrementally rather than duplicate them at a single time step. 
-# We're also changing the effect of the `UPDATE_EVERY` variable - this now becomes the frequency with which we perform both 
-# the gradient descent step on the $Q$ network parameters and the soft update of the $Q_{target}$ parameters. 
-
-
+  
 ## Install dependencies
 import nvidia_smi
 import time
@@ -49,7 +17,8 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# In[2]:
 
 
 def check_host_resources():
@@ -58,9 +27,11 @@ def check_host_resources():
     """
     ## Setting and checking device
     ## Checking resources (GPU and Memory)
+    ####################################
     from psutil import virtual_memory
     ram_gb = virtual_memory().total / 1e9
     print('Your runtime has {:.1f} gigabytes of available RAM\n'.format(ram_gb))
+    
     # CODESPACES: Your runtime has 8.3 gigabytes of available RAM
     # MX_HOST_MACHINE: Your runtime has 33.3 gigabytes of available RAM
 
@@ -77,6 +48,7 @@ def check_host_resources():
 
     print(f'GPU = {_GPU}')
 
+    ####################################
     def _bytes_to_megabytes(bytes):
         return round((bytes/1024)/1024,2)
 
@@ -91,7 +63,37 @@ def check_host_resources():
       #OSError: libnvidia-ml.so.1: cannot open shared object file: No such file or directory
     #MX_HOST_MACHINE: NVIDIA RTX A200 8192MiB
 
-#check_host_resources()
+
+# In[3]:
+
+
+check_host_resources()
+
+
+# In[4]:
+
+
+#gpu_info = get_ipython().getoutput('nvidia-smi')
+#gpu_info = '\n'.join(gpu_info)
+#if gpu_info.find('failed') >= 0:
+#  print('Not connected to a GPU')
+#else:
+#  print(gpu_info)
+
+#CODESPACES /bin/bash: line 1: nvidia-smi: command not found
+#MX_HOST_MACHINE: NVIDIA RTX A200 8192MiB
+
+
+# In[5]:
+
+
+## Setting and checking device
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(device)
+
+
+# In[6]:
+
 
 class QNetwork(nn.Module):
     """Represent the agent's policy model"""
@@ -161,6 +163,9 @@ class ReplayBuffer:
     def __len__(self):
         """Return the current size of internal memory"""
         return len(self.memory)
+
+
+# In[7]:
 
 
 class DQN_agent():
@@ -348,6 +353,11 @@ class DQN_agent():
         return returns
     
 
+
+
+# In[8]:
+
+
 class BioreactorEnv():
     '''
     Chemostat environment that can handle an arbitrary number of bacterial strains where all are being controlled
@@ -498,8 +508,11 @@ class BioreactorEnv():
 
 
 
+# ## Setting up Bioreactor
 
-## Setting up BioreactorEnv
+# In[9]:
+
+
 current_time = time.time()
 
 
@@ -632,9 +645,18 @@ print(f'Execution time (minutes): {(end_time - current_time)/60}')
 ##Execution time (mins): 0.4359638055165609 with n_episodes 20 in MX_HOST_MACHINE: 33.3G RAM, NVIDIA RTX A200 8192MiB
 ##Execution time (mins): 0.3237577478090922 with n_episodes 20 in CODESPACES  2-core • 8GB RAM • 32GB HD
 
+
+
+# In[10]:
+
+
 explore_rates = [
     agent.get_explore_rate(episode, 1.5) for episode in range(1, n_episodes+1)
 ]
+
+
+# In[11]:
+
 
 ## Plotting and Saving plots
 fig, ax1 = plt.subplots()
@@ -650,6 +672,7 @@ plt.tight_layout()
 ax1.legend(loc=(0.21, 0.67))
 ax2.legend(loc=(0.6, 0.22))
 plt.savefig('fig-return_explore_rate.png')
+plt.close()
 #plt.show()
 
 plt.figure()
@@ -660,6 +683,7 @@ plt.legend()
 plt.xlabel('Time (hours)')
 plt.ylabel('Population cells/L')
 plt.savefig('fig-population_cells.png')
+plt.close()
 #plt.show()
 
 fig, axs = plt.subplots(2,1)
@@ -669,5 +693,12 @@ axs[1].step(np.arange(len(env.us)) * sampling_time, [x[1] for x in env.us], labe
 plt.xlabel('Time (hours)')
 plt.ylabel('$C_{in}$')
 plt.savefig('fig-actions.png')
+plt.close()
 #plt.show()
+
+
+# In[ ]:
+
+
+
 
