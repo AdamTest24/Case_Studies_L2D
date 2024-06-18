@@ -10,51 +10,286 @@
 
 ## Prerequisites
 Session 1: Reinforcement learning with tabular value functions
+	> Learn to train an agent to navigate some simple environments with limited state-action spaces. The agent could be located in one of a relatively small number of squares on a grid and was able to move either up, down, left or right. 
 Session 2: Deep reinforcement learning
+	> Learn to train an agent with an much larger observation space, comprising of continuous - rather than discrete - values.
 
 ## Introduction 
-In this notebook, we demonstrate the key parts of a DQN agent and then apply that to the maximisation of the product output of a microbial co-culture growing in a bioreactor. 
+In this notebook, we demonstrate the key parts of a DQN agent and then apply that to the maximisation of the product output of a microbial co-culture growing in a bioreactor [1].
 
-For `DQN_agent()` The configuration variables are similar to those from the session two notebook, with one exception - we introduce `TAU` to enable us to perform soft updates on the parameters of the $ Q_{target} $ network, so that they shift towards the $Q$ network parameters incrementally rather than duplicate them at a single time step. We're also changing the effect of the `UPDATE_EVERY` variable - this now becomes the frequency with which we perform both the gradient descent step on the $Q$ network parameters and the soft update of the $Q_{target}$ parameters. 
-
-* References 
-> Treloar, Neythen J., Alex JH Fedorec, Brian Ingalls, and Chris P. Barnes. "Deep reinforcement learning for the control of microbial co-cultures in bioreactors." PLoS computational biology 16, no. 4 (2020): e1007783. [DOI](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007783) [google-citations](https://scholar.google.com/scholar?oi=bibs&hl=en&cites=17698721817212738220)
-
-
-
-## 1. Setting up DQN agent
+### Setting up DQN agent
+1. QNetwork.   
+Let's start with the creation of QNetwork using pytorch's neural network modules, using a simple feed-fordward network with two hidden layers:
 ```python
 class QNetwork(nn.Module):
+    """Represent the agent's policy model"""
+    
     def __init__(self, state_size, action_size, layer1_size=64, layer2_size=64):
+        """Build a network that can take a description of an environment's state and 
+        output the value of available actions.
+        
+        Params
+        =======
+            state_size (int): Dimension of each state
+            action_size (int): Dimension of each action
+            layer1_size (int): Number of nodes in first hidden layer
+            layer2_size (int): Number of nodes in second hidden layer
+        """
+        super(QNetwork, self).__init__() ## calls __init__ method of nn.Module class
+        self.layer1 = nn.Linear(state_size, layer1_size)
+        self.layer2 = nn.Linear(layer1_size, layer2_size)
+        self.layer3 = nn.Linear(layer2_size, action_size)
+
     def forward(self, x):
+        """Map state -> action values."""
+        x = F.relu(self.layer1(x))
+        x = F.relu(self.layer2(x))
+        return self.layer3(x)
+```
 
+2. Memory.    
+For classification tasks each sample data require to be independent to any other data samples. 
+However for reinforcement learning the training samples are temporarilly correlated and **not** drawn from stationary distrubtions.
+Hence, the `ReplayerBuffer` method stores experiences of the agent to create mini-batches of training data from randomly sample experiences.
+`ReplayerBuffer` use helpers from Python's `collections` module: (1) `deque`, similar to `list` that set maximum length using `buffer_size` and (2) `namedtuple` which makes `tuple` more readable using name fields instead of numeric indexs.
+```python
 class ReplayBuffer:
+    """Fixed-size buffer to store experience tuples"""
+    
     def __init__(self, action_size, buffer_size, batch_size):
-    def add(self,state, action, reward, next_state,done):
-    def sample(self):
+        """Initialize a ReplayBuffer object
 
+        Params
+        ======
+            action_size (int): dimension of each action
+            buffer_size (int): maximum size of buffer
+            batch_size (int): size of each training batch
+        """
+
+        self.action_size = action_size
+        self.memory = deque(maxlen=buffer_size)
+        self.batch_size = batch_size
+        self.experience = namedtuple("Experience", field_names=["state",
+                                                                "action",
+                                                                "reward",
+                                                                "next_state",
+                                                                "done"])
+
+    def add(self,state, action, reward, next_state,done):
+        """Add a new experience to memory"""
+        e = self.experience(state, action, reward, next_state, done)
+        self.memory.append(e)
+
+    def sample(self):
+        """Randomly sample a batch of experiences from memory"""
+        experiences = random.sample(self.memory, k=self.batch_size)
+
+        states = torch.from_numpy(np.vstack([e.state for e in experiences if e is not None])).float().to(device)
+        actions = torch.from_numpy(np.vstack([e.action for e in experiences if e is not None])).long().to(device)
+        rewards = torch.from_numpy(np.vstack([e.reward for e in experiences if e is not None])).float().to(device)
+        next_states = torch.from_numpy(np.vstack([e.next_state for e in experiences if e is not None])).float().to(device)
+        dones = torch.from_numpy(np.vstack([e.done for e in experiences if e is not None]).astype(np.uint8)).float().to(device)
+
+        return (states, actions, rewards, next_states, dones)
+
+    def __len__(self):
+        """Return the current size of internal memory"""
+        return len(self.memory)
+```
+
+3. `DQN_agent()` 
+3.1 Configuration of the agent
+* The variable `TAU` enable us to perform soft updates on the parameters of the $ Q_{target}$ network, so that they shift towards the $Q$ network parameters incrementally rather than duplicate them at a single time step. 
+* The variable `UPDATE_EVERY` relates to the frequency with which we perform both the gradient descent step on the $Q$ network parameters and the soft update of the $Q_{target}$ parameters. 
+```python
 class DQN_agent():
-    Agent that interacts with and learns from an environment using artificial neural networks 
-    to approximate its state-action value function
-       def __init__(self, 
-                  env, 
-              state_size, 
-              action_size,
-              BUFFER_SIZE = int(1e5),
-              BATCH_SIZE = 64,
-              GAMMA = 0.99,
-              TAU = 1e-3,
-              LR = 5e-4,
-              UPDATE_EVERY = 4):
-         self.q_network = QNetwork
-         self.q_network_target = QNetwork
-         self.optimizer = optim.Adam
-         self.memory = ReplayBuffer
-      def get_explore_rate(self, episode, decay):
-      def policy(self, state, epsilon=0):
-      def update_target(self, model, target_model):
-      def update_Q(self, experiences):
-      def train(self, n_episodes=200, max_t=1000, decay=None, verbose=True):
+    """Agent that interacts with and learns from an environment using artificial neural networks 
+    to approximate its state-action value function"""
+
+    def __init__(self, 
+                 env, 
+                 state_size, 
+                 action_size,
+                 BUFFER_SIZE = int(1e5),
+                 BATCH_SIZE = 64,
+                 GAMMA = 0.99,
+                 TAU = 1e-3,
+                 LR = 5e-4,
+                 UPDATE_EVERY = 4):
+        """Initialize an Agent object
+
+        Params
+        =======
+            env: an environment object
+            state_size (int): dimension of each state
+            action_size (int): dimension of each action
+            BUFFER_SIZE = int(1e5)  # replay buffer size
+            BATCH_SIZE = 64         # minibatch size
+            GAMMA = 0.99            # discount factor
+            TAU = 1e-3              # for soft update of target parameters
+            LR = 5e-4               # learning rate
+            UPDATE_EVERY = 4        # how often to update the network
+        """
+
+        self.env = env
+        self.state_size = state_size
+        self.action_size = action_size
+        self.BUFFER_SIZE = BUFFER_SIZE
+        self.BATCH_SIZE = BATCH_SIZE
+        self.GAMMA = GAMMA
+        self.TAU = TAU
+        self.LR = LR
+        self.UPDATE_EVERY = UPDATE_EVERY
+        
+        # Function approximation networks:
+        self.q_network = QNetwork(state_size, action_size).to(device)
+        self.q_network_target = QNetwork(state_size, action_size).to(device)
+
+        # Optimise the parameters in the Q network, using the learning rate defined above
+        self.optimizer = optim.Adam(self.q_network.parameters(), lr=self.LR)
+
+        # Replay memory
+        self.memory = ReplayBuffer(action_size, self.BUFFER_SIZE, self.BATCH_SIZE)
+        # Initialize time step (for updating every UPDATE_EVERY steps)
+        self.t_step = 0
+
+    def get_explore_rate(self, episode, decay):
+        """Calculates the logarithmically decreasing explore rate
+
+        Params
+        ======
+            episode (int): the current episode
+            decay (float): controls the rate of decay of the explore rate
+        
+        Returns
+        =======
+            explore_rate (float): the epsilon in the agent's epsilon-greedy policy
+        """
+
+        # Input validation
+        if not 0 < decay:
+            raise ValueError("decay needs to be above 0")
+        
+        # Ensure rate returned is between 0 and 1:
+        min_explore_rate = 0
+        max_explore_rate = 1
+        explore_rate = 1.0 - math.log10(episode / decay)
+        return max(min_explore_rate, min(max_explore_rate, explore_rate))
+    
+    def policy(self, state, epsilon=0):
+        """Returns action for given state as per current policy
+
+        Params
+        ======
+            state (array_like): current state
+            epsilon (float): for epsilon-greedy action selection
+        """
+
+        state = torch.from_numpy(state).float().unsqueeze(0).to(device)
+        self.q_network.eval()
+        with torch.no_grad():
+            action_values = self.q_network(state)
+        self.q_network.train()
+
+        # Epsilon-greedy action selction
+        if random.random() > epsilon:
+            return np.argmax(action_values.cpu().data.numpy())
+        else:
+            return random.choice(np.arange(self.action_size))
+
+    def update_target(self, model, target_model):
+        """Update target model parameters
+
+        Params
+        =======
+            local model (PyTorch model): weights will be copied from
+            target model (PyTorch model): weights will be copied to
+        """
+        for target_param, local_param in zip(target_model.parameters(), model.parameters()):
+            target_param.data.copy_(self.TAU*local_param.data + (1-self.TAU)*target_param.data) 
+
+    def update_Q(self, experiences):
+        """Update value parameters using given batch of experience tuples.
+        
+        Params
+        =======
+            experiences (Tuple[torch.Variable]): tuple of (s, a, r, s', done) tuples
+        """
+        states, actions, rewards, next_states, dones = experiences
+        
+        # We use mean squared error as the loss function
+        criterion = torch.nn.MSELoss()
+        # The local model is the one we need to train so we put it in training mode
+        self.q_network.train()
+        # Conversely, we want the target model to be in evaluation mode so that when 
+        # we do a forward pass it does not calculate the gradients
+        self.q_network_target.eval()
+        
+        with torch.no_grad():
+            future_pred = self.q_network_target(next_states).detach().max(1)[0].unsqueeze(1)
+
+        # .detach() ->  Returns a new Tensor, detached from the current graph.
+        targets = rewards + (self.GAMMA * future_pred * (1 - dones))
+
+        # Shape of output from the model (batch_size, action_size) 
+        predicted_targets = self.q_network(states).gather(1, actions)
+
+        loss = criterion(predicted_targets, targets).to(device)
+        self.optimizer.zero_grad()
+        loss.backward()
+        self.optimizer.step()
+
+    def train(self, n_episodes=200, max_t=1000, decay=None, verbose=True):
+        """Deep Q-Learning
+        
+        Params
+        ======
+            n_episodes (int): maximum number of training epsiodes
+            max_t (int): maximum number of timesteps per episode
+            decay (float): controls the rate of decay of the explore rate
+            verbose (bool): whether to print updates on the training process
+        
+        Returns
+        =======
+            returns (list[float]): episode returns for analysis of training performance
+        """
+        returns = [] # list containing total reward from each episode
+
+        # Reasonable default value for explore_rate decay:
+        if not decay:
+            decay = n_episodes / 11
+
+        for episode in range(1, n_episodes+1):
+            explore_rate = self.get_explore_rate(episode, decay)
+            state, prob = self.env.reset()
+            episode_return = 0
+
+            for t in range(max_t): 
+                action = self.policy(state, explore_rate)
+                next_state, reward, done, info, prob = self.env.step(action)
+
+                self.memory.add(state, action, reward, next_state, done)
+                # If enough samples are available in memory, get random subset and learn:
+                if len(self.memory) > self.BATCH_SIZE and t % self.UPDATE_EVERY == 0:
+                    experience = self.memory.sample()
+                    self.update_Q(experience)
+                    self.update_target(self.q_network, self.q_network_target)
+                state = next_state
+                episode_return += reward
+                if done:
+                    break
+        
+            returns.append(episode_return)
+            # If verbose mode is switched on, log returns every 10 episodes:
+            if verbose and episode % 10 == 0:
+                print(f'Episode {episode}\tExplore rate {explore_rate:.2f}\tReturn {episode_return:.2f}')
+        
+        return returns
+    
+
+
+
+
 ```
 
 ## 2. Setting up Bioreactor Environment
@@ -99,4 +334,9 @@ def reward_f(x):
 1. Change intervals of reward_function using "[N1, N2] = [20, 30] × 10^9 cells L−1." to add your conclusions on how the performance of the agent improves or worsened and the explore rate decreases during training. Plot results with returns and explore_rates).
 2. How `N_1` and `N_2` from env.xs maintain optimal level for product production (plot results with plt.plot(np.arange(len(env.xs)) `sampling_time`, [x[0] for x in env.xs], label = '$N_1$')).
 3. How RL agent is affected if you use "infrequent sampling" (see (Treloar et al, 2020) for further details on infrequent sampling )?
+
+## References
+> [1] Treloar, Neythen J., Alex JH Fedorec, Brian Ingalls, and Chris P. Barnes. "Deep reinforcement learning for the control of microbial co-cultures in bioreactors." PLoS computational biology 16, no. 4 (2020): e1007783. [DOI](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007783) [google-citations](https://scholar.google.com/scholar?oi=bibs&hl=en&cites=17698721817212738220)
+
+
 
