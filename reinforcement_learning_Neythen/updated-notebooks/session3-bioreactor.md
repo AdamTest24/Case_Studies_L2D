@@ -1,4 +1,4 @@
-# `session3-bioreactor.ipynb`: "Deep Q network for bioreactor optimisation"
+# Session 3: Deep Q network for bioreactor optimisation
 * Author(s) for paper and code: Neythen J. Treloar
 * Author(s) for educational material: Saba Ferdous, Ed Lowther, and  Miguel Xochicale
 
@@ -9,15 +9,16 @@
 * Learn how to use Deep Q network for Chemostat environments
 
 ## Prerequisites
-Session 1: Reinforcement learning with tabular value functions
-	> Learn to train an agent to navigate some simple environments with limited state-action spaces. The agent could be located in one of a relatively small number of squares on a grid and was able to move either up, down, left or right. 
-Session 2: Deep reinforcement learning
-	> Learn to train an agent with an much larger observation space, comprising of continuous - rather than discrete - values.
+Session 1: Reinforcement learning with tabular value functions   
+> Learn to train an agent to navigate some simple environments with limited state-action spaces. The agent could be located in one of a relatively small number of squares on a grid and was able to move either up, down, left or right. 
 
-## Introduction 
+Session 2: Deep reinforcement learning   
+> Learn to train an agent with an much larger observation space, comprising of continuous - rather than discrete - values.
+
+## 1. Introduction 
 In this notebook, we demonstrate the key parts of a DQN agent and then apply that to the maximisation of the product output of a microbial co-culture growing in a bioreactor [1].
 
-### Setting up DQN agent
+## 2. Setting up DQN agent
 1. QNetwork.   
 Let's start with the creation of QNetwork using pytorch's neural network modules, using a simple feed-fordward network with two hidden layers:
 ```python
@@ -292,7 +293,7 @@ class DQN_agent():
 
 ```
 
-## 2. Setting up Bioreactor Environment
+## 3. Setting up Bioreactor Environment
 ```python
 class BioreactorEnv():
    def __init__(self, 
@@ -318,7 +319,7 @@ def reward_f(x):
 
 
 
-## 3. Results
+## 4. Results
 
 ![fig](fig-actions.png)  
 **Fig** Actions
@@ -330,12 +331,12 @@ def reward_f(x):
 **Fig** Return and explore rate
 
 
-## 4. Assignments 
+## 5. Assignments 
 1. Change intervals of reward_function using "[N1, N2] = [20, 30] × 10^9 cells L−1." to add your conclusions on how the performance of the agent improves or worsened and the explore rate decreases during training. Plot results with returns and explore_rates).
 2. How `N_1` and `N_2` from env.xs maintain optimal level for product production (plot results with plt.plot(np.arange(len(env.xs)) `sampling_time`, [x[0] for x in env.xs], label = '$N_1$')).
 3. How RL agent is affected if you use "infrequent sampling" (see (Treloar et al, 2020) for further details on infrequent sampling )?
 
-## References
+## 6. References
 > [1] Treloar, Neythen J., Alex JH Fedorec, Brian Ingalls, and Chris P. Barnes. "Deep reinforcement learning for the control of microbial co-cultures in bioreactors." PLoS computational biology 16, no. 4 (2020): e1007783. [DOI](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007783) [google-citations](https://scholar.google.com/scholar?oi=bibs&hl=en&cites=17698721817212738220)
 
 
