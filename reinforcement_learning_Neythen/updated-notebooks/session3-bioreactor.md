@@ -312,33 +312,187 @@ class DQN_agent():
 
 ```
 
-## 3. Setting up Bioreactor Environment
+## 3. Creation of Bioreactor Environment
+The class `BioreactorEnv()` create a chemostat environment that can handle an arbitrary number of bacterial strains where all are being controlled.
+
+### 3.1 Initialisation
+* The variable `xdot` represents an array of the derivatives for all state variables.
+* The variable `reward_func` calculate the regard function based on state, action and next state.
+* The variable `sampling_time` defines the time between samples and hold intervals.
+* The variable `num_controlled_species` its self explanatory.
+* The variable `initial_x` represents the initial state (e.g., shape array (8,))
+* The variable `max_t` represents the maximum number of timesteps per episode.
+* The variable `n_states` represents the number of states (e.g., 10).
+* The variable` n_actions` represents the number of actions (e.g., 2).
+* The variable `continuous_s` is a boolean flag when `True` returns scaled bacterial populations (1/100000). E.g.,:`[0.26154319 0.2205354 ], otherwise, discretises the population of bacteria to a state suitable for the agent.
+
+### 3.2 `step(self, action)`
+The `step` module performs one sampling and hold interval using the action provided by a reinforcment learning agent, returning state, reward and boolean variable.
+
+### 3.3 `action_to_u(self,action)`
+The `action_to_u` module takes a discrete action index and returns the corresponding continuous `Cin` concentrations of the chosen action.
+
+### 3.4 `get_state(self)`
+The `get_state` module obtains the state, scaled bacterial populations, to be observed by the agent.
+
+### 3.5 `pop_to_state(self, N)`
+The `pop_to_state` module discretises the population of bacteria to a state suitable for the agent.
+
+### 3.6 `reset(self, initial_x = None)`
+The `reset` module resets the environment to its inital state.
+
 ```python
 class BioreactorEnv():
-   def __init__(self, 
-                    xdot, 
-                    reward_func, 
-                    sampling_time, 
-                    num_controlled_species, 
-                    initial_x, max_t, 
-                    n_states = 10, 
-                    n_actions = 2, 
-                    continuous_s = False):
-    def step(self, action):
-    def get_state(self):
-    def action_to_u(self,action):
-    def pop_to_state(self, N):
-    def reset(self, initial_x = None):
+    '''
+    Chemostat environment that can handle an arbitrary number of bacterial strains where all are being controlled
+    '''
+    def __init__(self, 
+                 xdot, 
+                 reward_func, 
+                 sampling_time, 
+                 num_controlled_species, 
+                 initial_x, 
+                 max_t, 
+                 n_states = 10, 
+                 n_actions = 2, 
+                 continuous_s = False):
+        '''
+        Parameters:
+            xdot: array of the derivatives for all state variables
+            reward_func: function to calculate reward: reward = reward_func(state, action, next_state)
+            sampling_time: time between sampl-and-hold intervals
+            num_controlled_species: 2
+            initial_x: the initial state (e.g., shape array (8,))
+            max_t: maximum number of timesteps per episode
+            n_states = 10
+            n_actions = 2
+            continuous_s=
+			True:  get_state self.xs[-1][0:self.num_controlled_species]/100000
+			False: get_state = self.pop_to_state(self.xs[-1][0:self.num_controlled_species])
+        Returns:
+            env returns populations/scaling to agent
+        References:
+            https://github.com/ucl-cssb/ROCC/blob/master/ROCC/chemostat_env/chemostat_envs.py
+        '''
+        one_min = 0.016666666667 #(1/60)
+        self.scaling = 1 #population scaling to prevent neural network instability in agent, aim to have pops between 0 and 1. 
+        self.xdot = xdot
+        self.xs = [] # append odeint solutions of xdot
+        self.us = [] # append actions
+        self.sampling_time = sampling_time*one_min
+        self.reward_func = reward_func
 
-def monod(C, C0, umax, Km, Km0):
-def xdot_product(x, t, u):
-        R = monod(C, C0, umax, Km, Km0)
-def reward_f(x):
+        self.u_bounds = [0,0.1]
+        self.N_bounds = [0, 50000]
+
+        self.u_disc = n_actions
+        self.N_disc = n_states
+        self.num_controlled_species = num_controlled_species
+        self.initial_x = initial_x
+        self.max_t = max_t
+        self.continuous_s = continuous_s
+    
+    def step(self, action):
+        '''
+        Performs one sampling and hold interval using the action provided by a reinforcment learning agent
+
+        Parameters:
+            action: action chosen by agent
+        Returns:
+            state: scaled state to be observed by agent
+            reward: reward obtained buring this sample-and-hold interval
+            done: boolean value indicating whether the environment has reached a terminal state
+        '''
+        
+        u = self.action_to_u(action)
+        
+        #add noise
+        #Cin = np.random.normal(Cin, 0.1*Cin) #10% pump noise
+
+        self.us.append(u)
+
+        ts = [0, self.sampling_time]
+        sol = odeint(self.xdot, self.xs[-1], ts, args=(u,))[1:]
+        self.xs.append(sol[-1,:])
+        self.state = self.get_state() #scaled bacterial populations
+        reward, done = self.reward_func(self.xs[-1]) #reward func with last appended sol from 0 to max_t
+        
+        if len(self.xs) == self.max_t:
+            done = True
+
+        return self.state, reward, done, None, 1
+
+    def action_to_u(self,action):
+        '''
+        Takes a discrete action index and returns the corresponding continuous state vector
+
+        Paremeters:
+            action: the descrete action
+            num_species: the number of bacterial populations
+            num_Cin_states: the number of action states the agent can choose from for each species
+            Cin_bounds: list of the upper and lower bounds of the Cin states that can be chosen
+        Returns:
+            state: the continuous Cin concentrations correspoding to the chosen action
+        '''
+
+        # calculate which bucket each eaction belongs in
+        buckets = np.unravel_index(action, [self.u_disc] * self.num_controlled_species)
+
+        # convert each bucket to a continuous state variable
+        u = []
+        for r in buckets:
+            u.append(self.u_bounds[0] + r*(self.u_bounds[1]-self.u_bounds[0])/(self.u_disc-1))
+
+        u = np.array(u).reshape(self.num_controlled_species,)
+        return np.clip(u, self.u_bounds[0], self.u_bounds[1])
+
+
+    def get_state(self):
+        '''
+        Gets the state (scaled bacterial populations) to be observed by the agent
+
+        Returns:
+            scaled bacterial populations (1/100000). E.g.,:`[0.26154319 0.2205354 ]`
+        '''
+        if self.continuous_s:
+            return self.xs[-1][0:self.num_controlled_species]/100000
+        else:
+            return self.pop_to_state(self.xs[-1][0:self.num_controlled_species])
+
+    
+    def pop_to_state(self, N):
+        '''
+        discritises the population of bacteria to a state suitable for the agent
+
+        :param N: population
+        :return: discitised population
+        '''
+        step = (self.N_bounds[1] - self.N_bounds[0])/self.N_disc
+        N = np.clip(N, self.N_bounds[0], self.N_bounds[1]-1)
+        return np.ravel_multi_index((N//step).astype(np.int32), [self.N_disc]*self.num_controlled_species)
+
+    def reset(self, initial_x = None):
+        '''
+        Resets env to inital state:
+
+        Parameters:
+            initial_S (optional) the initial state to be reset to if different to the default
+        Returns:
+            The state to be observed by the agent
+        '''
+        
+        if initial_x is None:
+            initial_x = self.initial_x
+
+        self.xs = [initial_x]
+        self.us = []
+        return (self.get_state(),1)
+
 ```
 
+## 4. Setting up chemostat environment and `DQN_agent` and train `DQN_agent`
 
-
-## 4. Results
+## 5. Results
 
 ![fig](fig-actions.png)  
 **Fig** Actions
@@ -350,12 +504,12 @@ def reward_f(x):
 **Fig** Return and explore rate
 
 
-## 5. Assignments 
+## 6. Assignments 
 1. Change intervals of reward_function using "[N1, N2] = [20, 30] × 10^9 cells L−1." to add your conclusions on how the performance of the agent improves or worsened and the explore rate decreases during training. Plot results with returns and explore_rates).
 2. How `N_1` and `N_2` from env.xs maintain optimal level for product production (plot results with plt.plot(np.arange(len(env.xs)) `sampling_time`, [x[0] for x in env.xs], label = '$N_1$')).
 3. How RL agent is affected if you use "infrequent sampling" (see (Treloar et al, 2020) for further details on infrequent sampling )?
 
-## 6. References
+## 7. References
 > [1] Treloar, Neythen J., Alex JH Fedorec, Brian Ingalls, and Chris P. Barnes. "Deep reinforcement learning for the control of microbial co-cultures in bioreactors." PLoS computational biology 16, no. 4 (2020): e1007783. [DOI](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007783) [google-citations](https://scholar.google.com/scholar?oi=bibs&hl=en&cites=17698721817212738220)
 
 
