@@ -19,7 +19,7 @@ Session 2: Deep reinforcement learning
 In this notebook, we demonstrate the key parts of a DQN agent and then apply that to the maximisation of the product output of a microbial co-culture growing in a bioreactor [1].
 
 ## 2. Setting up DQN agent
-1. QNetwork.   
+### 2.1. QNetwork.   
 Let's start with the creation of QNetwork using pytorch's neural network modules, using a simple feed-fordward network with two hidden layers:
 ```python
 class QNetwork(nn.Module):
@@ -48,7 +48,7 @@ class QNetwork(nn.Module):
         return self.layer3(x)
 ```
 
-2. Memory.    
+### 2.2 Memory.    
 For classification tasks each sample data require to be independent to any other data samples. 
 However for reinforcement learning the training samples are temporarilly correlated and **not** drawn from stationary distrubtions.
 Hence, the `ReplayerBuffer` method stores experiences of the agent to create mini-batches of training data from randomly sample experiences.
@@ -98,10 +98,33 @@ class ReplayBuffer:
         return len(self.memory)
 ```
 
-3. `DQN_agent()` 
-3.1 Configuration of the agent
-* The variable `TAU` enable us to perform soft updates on the parameters of the $ Q_{target}$ network, so that they shift towards the $Q$ network parameters incrementally rather than duplicate them at a single time step. 
-* The variable `UPDATE_EVERY` relates to the frequency with which we perform both the gradient descent step on the $Q$ network parameters and the soft update of the $Q_{target}$ parameters. 
+### 2.3. Configuration of the `DQN_agent()` 
+We can configurate how the agent learns from its environment with the following variables:
+* The variable `TAU` enable us to perform soft updates on the parameters of the $Q_{target}$ network, so that they shift towards the $Q$ network parameters incrementally rather than duplicate them at a single time step (e.g., 0.001).
+* The variable `UPDATE_EVERY` relates to the frequency with which we perform both the gradient descent step on the $Q$ network parameters and the soft update of the $Q_{target}$ parameters (e.g., 4).
+* The variable `BUFFER_SIZE` set replay buffer size (e.g., 100000).
+* The variable `BATCH_SIZE` for minibatch size (e.g., 64).
+* The variable `GAMMA` is discount factor (e.g., 0.99).
+* The variable `LR` is the learning rate (e.g., 0.0005).
+
+#### 2.3.1 Initialisation
+`DQN_agent` contains two instances of `Qnetwork`: $Q$ and $Q_{target}$ and adam optimiser for $Q$ network which copies parameters to $Q_{target}$ network and replay memory with `ReplayerBuffer()` class.
+
+#### 2.3.2. `get_explore_rate`
+`get_explore_rate` computes the epsilon in the agent's epsilon-greedy policy based on the current episode, `episode`, and decay value that controls the rate of decay of the explore rate.
+
+#### 2.3.3. `epsilon_greedy_policy`
+`epsilon_greedy_policy` returns an action for given the current state and the epsilon-greedy action selection
+
+#### 2.3.4. `update_target(self, model, target_model)`
+Update target model parameters with weights will be copied from local model  to target model
+
+#### 2.3.5. `update_Q(self, experiences)`
+`update_Q` function train our Q network with a sample of experiences from the agent's memory using the discount factor, `GAMMA`.
+
+#### 2.3.6. `train(self, n_episodes=200, max_t=1000, decay=None, verbose=True)`
+Then we have our training function, adding and sampling from the agent's memory.
+
 ```python
 class DQN_agent():
     """Agent that interacts with and learns from an environment using artificial neural networks 
@@ -286,10 +309,6 @@ class DQN_agent():
                 print(f'Episode {episode}\tExplore rate {explore_rate:.2f}\tReturn {episode_return:.2f}')
         
         return returns
-    
-
-
-
 
 ```
 
