@@ -375,7 +375,9 @@ class BioreactorEnv():
             https://github.com/ucl-cssb/ROCC/blob/master/ROCC/chemostat_env/chemostat_envs.py
         '''
         one_min = 0.016666666667 #(1/60)
-        self.scaling = 1 #population scaling to prevent neural network instability in agent, aim to have pops between 0 and 1. 
+        self.scaling = 1 
+			#population scaling to prevent neural network instability in agent
+			#aim to have pops between 0 and 1. 
         self.xdot = xdot
         self.xs = [] # append odeint solutions of xdot
         self.us = [] # append actions
@@ -492,17 +494,153 @@ class BioreactorEnv():
 
 ## 4. Setting up chemostat environment and `DQN_agent` and train `DQN_agent`
 
+
+### 4.1 monod equation
+```python
+def monod(C, C0, umax, Km, Km0):
+    '''
+    Calculates the growth rate based on the monod equation
+
+    Parameters:
+        C: the concetrations of the auxotrophic nutrients for each bacterial
+            population
+        C0: concentration of the common carbon source
+        umax: array of the maximum growth rates for each bacteria
+        Km: array of the saturation constants for each auxotrophic nutrient
+        Km0: array of the saturation constant for the common carbon source for
+            each bacterial species
+    '''
+
+    growth_rate = ((umax * C) / (Km + C)) * (C0 / (Km0 + C0))
+
+    return growth_rate
+
+
+```
+
+### 4.2 `xdot_product`
+```python
+def xdot_product(x, t, u):
+    '''
+    Calculates and returns derivatives for the numerical solver odeint
+
+    Parameters:
+        x: current state (e.g., xdot.shape = (8,))
+        t: current time
+        u: array of the concentrations of the auxotrophic nutrients and the common carbon source
+        #num_species: the number of bacterial populations
+    Returns:
+        xdot: array of the derivatives for all state variables
+    References:
+        https://github.com/ucl-cssb/ROCC/blob/master/ROCC/chemostat_env/chemostat_envs.py        
+    '''
+    q = 0.5 #(0-umax) # q term takes account of the dilution
+    
+    y, y0, umax, Km, Km0 = [np.array(x) for x in [
+                            [480000., 480000.], # y (10**12)
+                            [520000., 520000.], # y0 (10**12)
+                            [1., 1.1], # umax (0.4 - 3)
+                            [0.00048776, 0.000000102115],   # Km (2)
+                            [0.00006845928, 0.00006845928]]  # Km0 (2)
+                           ]
+    
+    # extract variables
+    N = x[:2] #np.array(S[:self.num_species])
+    C = x[2:4] #np.array(S[self.num_species:self.num_species+self.num_controlled_species])
+    C0 = x[4] # np.array(S[-1])
+    A = x[5]
+    B = x[6]
+    P = x[7]
+
+    R = monod(C, C0, umax, Km, Km0)
+
+    # calculate derivatives
+    dC0 = q*(0.1 - C0) - sum(1/y0[i]*R[i]*N[i] for i in range(2)) #Eq1. concentration of the shared carbon source
+    dC = q * (u - C) - (1 / y) * R * N # sometimes dC.shape is (2,2); Eq2
+    dN = N * (R - q) # Eq4
+
+    dA = N[0] - 2 * A ** 2 * B - q * A
+    dB = N[1] - A ** 2 * B - q * B
+    dP = A ** 2 * B - q * P
+
+    # construct derivative vector for odeint
+    xdot = np.append(dN, dC)
+    xdot = np.append(xdot, dC0)
+    xdot = np.append(xdot, dA)
+    xdot = np.append(xdot, dB)
+    xdot = np.append(xdot, dP)
+    
+    return xdot
+
+
+```
+
+### 4.3 Reward function
+```python
+def reward_function(x):
+    """
+    caluclates the reward based on the rate of product output
+    :param x:
+    :return:
+    """
+    P = x[-1]
+
+    if x[0] < 1000 or x[1] < 1000:
+        reward = -1
+        done = True
+    else:
+        reward = P/100000
+        done = False
+
+    return reward, done
+```
+
+
+### 4.4 Setting up and train chemostat environment
+```python
+    num_controlled_species = 2
+    sampling_time = 10  # minutes
+    t_steps = int((24 * 60) / sampling_time)  # set this to 24 hours
+    initial_x = np.array([20000, 30000, 0., 0., 1., 0., 0., 0.]) # the initial state
+
+    n_states_env = 2
+    n_actions_env = 4
+
+    ## Setting up chemostat environment
+    env = BioreactorEnv(xdot_product, 
+                        reward_function, 
+                        sampling_time,
+                        num_controlled_species, 
+                        initial_x, 
+                        t_steps, 
+                        #n_states_env, #default: n_states = 10, 
+                        #n_actions_env, #default: n_actions = 2, 
+                        continuous_s = True)  
+
+    ## Setting up DQN_agent
+    n_states = 2
+    n_actions = 4
+    agent = DQN_agent(env, n_states, n_actions)
+
+    ## Train DQN_agent
+    n_episodes = 1000
+    returns = agent.train(n_episodes) # list containing total reward from each episode
+
+    controlling_rate_decay=n_episodes / 11  #controlling_rate_decay=1.5
+    explore_rates = [agent.get_explore_rate(episode, controlling_rate_decay) for episode in range(1, n_episodes+1)]
+```
+
+
 ## 5. Results
 
-![fig](fig-actions.png)  
-**Fig** Actions
+![fig](img/fig-return_explore_rate.png)  
+**Figure.** Return and explore rate
 
-![fig](fig-population_cells.png)  
-**Fig** Population cells 
+![fig](img/fig-population_cells.png)  
+**Figure.** Population cells 
 
-![fig](fig-return_explore_rate.png)  
-**Fig** Return and explore rate
-
+![fig](img/fig-actions.png)  
+**Figure.** Actions
 
 ## 6. Assignments 
 1. Change intervals of reward_function using "[N1, N2] = [20, 30] × 10^9 cells L−1." to add your conclusions on how the performance of the agent improves or worsened and the explore rate decreases during training. Plot results with returns and explore_rates).

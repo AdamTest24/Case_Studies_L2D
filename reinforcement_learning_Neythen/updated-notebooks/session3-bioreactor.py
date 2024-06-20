@@ -1,5 +1,3 @@
-  
-## Install dependencies
 import nvidia_smi
 import time
 import numpy as np
@@ -507,15 +505,6 @@ class BioreactorEnv():
 
 
 
-
-# ## Setting up Bioreactor
-
-# In[9]:
-
-
-current_time = time.time()
-
-
 def monod(C, C0, umax, Km, Km0):
     '''
     Calculates the growth rate based on the monod equation
@@ -524,17 +513,16 @@ def monod(C, C0, umax, Km, Km0):
         C: the concetrations of the auxotrophic nutrients for each bacterial
             population
         C0: concentration of the common carbon source
-        Rmax: array of the maximum growth rates for each bacteria
+        umax: array of the maximum growth rates for each bacteria
         Km: array of the saturation constants for each auxotrophic nutrient
         Km0: array of the saturation constant for the common carbon source for
             each bacterial species
     '''
 
-    # convert to numpy
-
     growth_rate = ((umax * C) / (Km + C)) * (C0 / (Km0 + C0))
 
     return growth_rate
+
 
 def xdot_product(x, t, u):
     '''
@@ -550,12 +538,12 @@ def xdot_product(x, t, u):
     References:
         https://github.com/ucl-cssb/ROCC/blob/master/ROCC/chemostat_env/chemostat_envs.py        
     '''
-    q = 0.5 #(0-Umax)
+    q = 0.5 #(0-umax) # q term takes account of the dilution
     
     y, y0, umax, Km, Km0 = [np.array(x) for x in [
                             [480000., 480000.], # y (10**12)
                             [520000., 520000.], # y0 (10**12)
-                            [1., 1.1], # Umax (0.4 - 3)
+                            [1., 1.1], # umax (0.4 - 3)
                             [0.00048776, 0.000000102115],   # Km (2)
                             [0.00006845928, 0.00006845928]]  # Km0 (2)
                            ]
@@ -571,15 +559,15 @@ def xdot_product(x, t, u):
     R = monod(C, C0, umax, Km, Km0)
 
     # calculate derivatives
-    dN = N * (R - q)  # q term takes account of the dilution
-    dC = q * (u - C) - (1 / y) * R * N # sometimes dC.shape is (2,2)
-    dC0 = q*(0.1 - C0) - sum(1/y0[i]*R[i]*N[i] for i in range(2)) # Eq1. concentration of the shared carbon source
+    dC0 = q*(0.1 - C0) - sum(1/y0[i]*R[i]*N[i] for i in range(2)) #Eq1. concentration of the shared carbon source
+    dC = q * (u - C) - (1 / y) * R * N # sometimes dC.shape is (2,2); Eq2
+    dN = N * (R - q) # Eq4
 
     dA = N[0] - 2 * A ** 2 * B - q * A
     dB = N[1] - A ** 2 * B - q * B
     dP = A ** 2 * B - q * P
 
-    # consstruct derivative vector for odeint
+    # construct derivative vector for odeint
     xdot = np.append(dN, dC)
     xdot = np.append(xdot, dC0)
     xdot = np.append(xdot, dA)
@@ -608,97 +596,100 @@ def reward_function(x):
     return reward, done
 
 
+def main():
+    """
+    Setting up and train Bioreactor
 
-num_controlled_species = 2
-sampling_time = 10  # minutes
-t_steps = int((24 * 60) / sampling_time)  # set this to 24 hours
-initial_x = np.array([20000, 30000, 0., 0., 1., 0., 0., 0.]) # the initial state
+    LOGS
+        in MX_HOST_MACHINE: 33.3G RAM, NVIDIA RTX A200 8192MiB
+            Execution time (mins): 0.2304505189259847 	 with n_episodes 10
+            Execution time (mins): 0.4359638055165609 	 with n_episodes 20 
+            Execution time (mins): 0.9316037853558858 	 with n_episodes 50
+            Execution time (minutes): 2.070314041773478  with n_episodes 100
+            Execution time (minutes): 12.566332964102427 with n_episodes 500
+            Execution time (minutes): 22.788715147972106 with n_episodes 1000
+        in CODESPACES  2-core • 8GB RAM • 32GB HD
+            Execution time (mins): 0.3237577478090922 with n_episodes 20 
+    """
+    current_time = time.time()
 
-n_states_env = 2
-n_actions_env = 4
+    num_controlled_species = 2
+    sampling_time = 10  # minutes
+    t_steps = int((24 * 60) / sampling_time)  # set this to 24 hours
+    initial_x = np.array([20000, 30000, 0., 0., 1., 0., 0., 0.]) # the initial state
 
-## Setting uo chemostat environment
-env = BioreactorEnv(xdot_product, 
-                    reward_function, 
-                    sampling_time,
-                    num_controlled_species, 
-                    initial_x, 
-                    t_steps, 
-                    #n_states_env, #default: n_states = 10, 
-                    #n_actions_env, #default: n_actions = 2, 
-                    continuous_s = True)  
+    n_states_env = 2
+    n_actions_env = 4
 
-## Setting up DQN_agent
-n_states = 2
-n_actions = 4
-agent = DQN_agent(env, n_states, n_actions)
-# n_episodes = 1000 #Original
-n_episodes = 20
+    ## Setting up chemostat environment
+    env = BioreactorEnv(xdot_product, 
+                        reward_function, 
+                        sampling_time,
+                        num_controlled_species, 
+                        initial_x, 
+                        t_steps, 
+                        #n_states_env, #default: n_states = 10, 
+                        #n_actions_env, #default: n_actions = 2, 
+                        continuous_s = True)  
 
-## Train DQN_agent
-returns = agent.train(n_episodes)
+    ## Setting up DQN_agent
+    n_states = 2
+    n_actions = 4
+    agent = DQN_agent(env, n_states, n_actions)
 
-end_time = time.time()
-print(f'---------------------------------')
-print(f'Execution time (minutes): {(end_time - current_time)/60}')
-#logs
-##Execution time (mins): 0.4359638055165609 with n_episodes 20 in MX_HOST_MACHINE: 33.3G RAM, NVIDIA RTX A200 8192MiB
-##Execution time (mins): 0.3237577478090922 with n_episodes 20 in CODESPACES  2-core • 8GB RAM • 32GB HD
+    ## Train DQN_agent
+    n_episodes = 1000 #Original
+    #n_episodes = 10 #0.23mins
+    #n_episodes = 20 # 0.43mins
+    #n_episodes = 50 # 0.93mins
+    #n_episodes = 500 #12.5mins
+    returns = agent.train(n_episodes) # list containing total reward from each episode
 
+    end_time = time.time()
+    print(f'---------------------------------')
+    print(f'Execution time (minutes): {(end_time - current_time)/60}')
 
+    controlling_rate_decay=n_episodes / 11  #controlling_rate_decay=1.5
+    explore_rates = [agent.get_explore_rate(episode, controlling_rate_decay) for episode in range(1, n_episodes+1)]
 
-# In[10]:
+    ## Plotting and Saving plots
+    fig, ax1 = plt.subplots()
+    plt.plot(returns, label='Return (i.e. rewards)')
+    ax1.set_ylabel('Return')
+    ax1.set_xlabel('Episode')
+    ax2 = ax1.twinx()
+    ax2.plot(explore_rates, color='black', label='Explore rate')
+    ax2.set_ylabel('Explore Rate')
+    ax2.set_xlabel('Episode')
+    plt.tight_layout()
+    ax1.legend(loc=(0.21, 0.67))
+    ax2.legend(loc=(0.6, 0.22))
+    plt.savefig('img/fig-return_explore_rate.png')
+    plt.close()
+    #plt.show()
 
+    plt.figure()
+    plt.title('Final population curve (env.xs: odeint solutions of xdot)')
+    plt.plot(np.arange(len(env.xs))*sampling_time, [x[0] for x in env.xs], label = '$N_1$')
+    plt.plot(np.arange(len(env.xs))*sampling_time, [x[1] for x in env.xs], label = '$N_2$')
+    plt.legend()
+    plt.xlabel('Time (hours)')
+    plt.ylabel('Population cells/L')
+    plt.savefig('img/fig-population_cells.png')
+    plt.close()
+    #plt.show()
 
-explore_rates = [
-    agent.get_explore_rate(episode, 1.5) for episode in range(1, n_episodes+1)
-]
-
-
-# In[11]:
-
-
-## Plotting and Saving plots
-fig, ax1 = plt.subplots()
-plt.plot(returns, label='Return')
-explore_rates = [agent.get_explore_rate(episode, n_episodes / 11) for episode in range(1, n_episodes+1)]
-ax1.set_ylabel('Return')
-ax1.set_xlabel('Episode')
-ax2 = ax1.twinx()
-ax2.plot(explore_rates, color='black', label='Explore rate')
-ax2.set_ylabel('Explore Rate')
-ax2.set_xlabel('Episode')
-plt.tight_layout()
-ax1.legend(loc=(0.21, 0.67))
-ax2.legend(loc=(0.6, 0.22))
-plt.savefig('fig-return_explore_rate.png')
-plt.close()
-#plt.show()
-
-plt.figure()
-plt.title('Final population curve')
-plt.plot(np.arange(len(env.xs)) *sampling_time, [x[0] for x in env.xs], label = '$N_1$')
-plt.plot(np.arange(len(env.xs)) *sampling_time, [x[1] for x in env.xs], label = '$N_2$')
-plt.legend()
-plt.xlabel('Time (hours)')
-plt.ylabel('Population cells/L')
-plt.savefig('fig-population_cells.png')
-plt.close()
-#plt.show()
-
-fig, axs = plt.subplots(2,1)
-plt.title('Actions')
-axs[0].step(np.arange(len(env.us)) * sampling_time, [x[0] for x in env.us], label = '$u_1$')
-axs[1].step(np.arange(len(env.us)) * sampling_time, [x[1] for x in env.us], label = '$u_2$', color = 'orange')
-plt.xlabel('Time (hours)')
-plt.ylabel('$C_{in}$')
-plt.savefig('fig-actions.png')
-plt.close()
-#plt.show()
-
-
-# In[ ]:
-
-
+    fig, axs = plt.subplots(2,1)
+    fig.suptitle(r"Actions (env.us)")
+    axs[0].step(np.arange(len(env.us))*sampling_time, [x[0] for x in env.us], label = '$u_1$')
+    axs[0].set_ylabel("$C_{in} lower bound$")
+    axs[1].step(np.arange(len(env.us))*sampling_time, [x[1] for x in env.us], label = '$u_2$', color = 'orange')
+    axs[1].set_ylabel("$C_{in} upper bound$")
+    axs[1].set_xlabel("Time (hours)")
+    plt.savefig('img/fig-actions.png')
+    plt.close()
+    #plt.show()
 
 
+if __name__ == "__main__":
+	main()
