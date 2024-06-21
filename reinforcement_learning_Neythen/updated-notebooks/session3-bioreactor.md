@@ -16,11 +16,31 @@ Session 2: Deep reinforcement learning
 > Learn to train an agent with an much larger observation space, comprising of continuous - rather than discrete - values.
 
 ## 1. Introduction 
-In this notebook, we demonstrate the key parts of a DQN agent and then apply that to the maximisation of the product output of a microbial co-culture growing in a bioreactor [1].
+In recent years, synthetic biology and industrial bioprocessing have been implementing increasingly complex systems composed of multiple, interacting microbial strains. 
+This has many advantages over single culture systems, including enhanced modularization and the reduction of the metabolic burden imposed on strains. 
+Despite these advantages, the control of multi-species communities (co-cultures) within bioreactors remains extremely challenging and this is the key reason why most industrial processing still uses single cultures. 
+
+
+### 1.1 Reinforcement learning for the control of two auxotrophic species in a chemostat. 
+
+(A) The basic reinforcement learning loop; the agent interacts with its environment through actions and observes the state of the environment along with a reward. The agent acts to maximise the total reward it receives (the return). 
+
+(B) System of two auxotrophs dependent on two different nutrients, with competition over a common carbon source. 
+
+(C) Diagram of a chemostat. The state observed by the reinforcement learning agent is composed of the populations of two strains of bacteria; the actions taken by the agent control the concentration of auxotrophic nutrients flowing into the reactor.
+
+(D) Representative system trajectory. The agent’s actions, taken at discrete time-points (circles), influence the state dynamics (black arrows), with the aim of fulfilling the reward condition (moving to the centre of the green circle). The
+state is comprised of the (continuously-defined) abundance of two microbial populations, N1 and N2. The agent’s actions dictate the rate at which auxotrophic nutrients flow into the reactor. 
+At each time-step, the agent’s reward is dependent on the distance between the current state and the target state.
+
+![fig](img/rl-chemostat.png)
+**Figure.** Population cells 
+
+In the following sections, reinforcement learning (RL) combined with neural networks is applied to the control of multiple interacting species in a bioreactor [1].
 
 ## 2. Setting up DQN agent
 ### 2.1. QNetwork.   
-Let's start with the creation of QNetwork using pytorch's neural network modules, using a simple feed-fordward network with two hidden layers:
+Let's start with the creation of QNetwork using pytorch's neural network modules, using a simple feed-forward network with two hidden layers [27].
 ```python
 class QNetwork(nn.Module):
     """Represent the agent's policy model"""
@@ -50,9 +70,9 @@ class QNetwork(nn.Module):
 
 ### 2.2 Memory.    
 For classification tasks each sample data require to be independent to any other data samples. 
-However for reinforcement learning the training samples are temporarilly correlated and **not** drawn from stationary distrubtions.
+However for reinforcement learning the training samples are temporarily correlated and **not** drawn from stationary distributions.
 Hence, the `ReplayerBuffer` method stores experiences of the agent to create mini-batches of training data from randomly sample experiences.
-`ReplayerBuffer` use helpers from Python's `collections` module: (1) `deque`, similar to `list` that set maximum length using `buffer_size` and (2) `namedtuple` which makes `tuple` more readable using name fields instead of numeric indexs.
+`ReplayerBuffer` use helpers from Python's `collections` module: (1) `deque`, similar to `list` that set maximum length using `buffer_size` and (2) `namedtuple` which makes `tuple` more readable using name fields instead of numeric indexes.
 ```python
 class ReplayBuffer:
     """Fixed-size buffer to store experience tuples"""
@@ -99,13 +119,21 @@ class ReplayBuffer:
 ```
 
 ### 2.3. Configuration of the `DQN_agent()` 
-We can configurate how the agent learns from its environment with the following variables:
+We can configure how the agent learns from its environment with the following variables:
 * The variable `TAU` enable us to perform soft updates on the parameters of the $Q_{target}$ network, so that they shift towards the $Q$ network parameters incrementally rather than duplicate them at a single time step (e.g., 0.001).
 * The variable `UPDATE_EVERY` relates to the frequency with which we perform both the gradient descent step on the $Q$ network parameters and the soft update of the $Q_{target}$ parameters (e.g., 4).
 * The variable `BUFFER_SIZE` set replay buffer size (e.g., 100000).
 * The variable `BATCH_SIZE` for minibatch size (e.g., 64).
-* The variable `GAMMA` is discount factor (e.g., 0.99).
+* The variable `GAMMA` is discount factor (e.g., 0.99). `GAMMA` represents how heavily the possible future rewards weigh in on decisions (0.9 is a common choice in RL).
 * The variable `LR` is the learning rate (e.g., 0.0005).
+
+The neural network, $QNetwork$, is used to estimate **the value function**. 
+$QNetwork$ consisting of 20 nodes [27] where each node use a RELU activation function.
+The input layer had $n$ nodes, one for each **microbial strain**; the linear output layer had $2_n$ nodes corresponding to each **variable action**.
+Adam optimiser is used to dynamically adapt the learning rate which is common in RL. 
+The **populations levels** were scaled by a factor of `10e-5` before being entered the neural network  and generated values between 0 to 1 and prevent instability.
+"[27] Riedmiller M. Neural fitted Q iteration–first experiences with a data efficient neural reinforcement learn-
+ing method. In: European Conference on Machine Learning. Springer; 2005. p. 317–328."
 
 #### 2.3.1 Initialisation
 `DQN_agent` contains two instances of `Qnetwork`: $Q$ and $Q_{target}$ and adam optimiser for $Q$ network which copies parameters to $Q_{target}$ network and replay memory with `ReplayerBuffer()` class.
@@ -114,7 +142,8 @@ We can configurate how the agent learns from its environment with the following 
 `get_explore_rate` computes the epsilon in the agent's epsilon-greedy policy based on the current episode, `episode`, and decay value that controls the rate of decay of the explore rate.
 
 #### 2.3.3. `epsilon_greedy_policy`
-`epsilon_greedy_policy` returns an action for given the current state and the epsilon-greedy action selection
+`epsilon_greedy_policy` returns an action for given the current state and the epsilon-greedy action selection.  
+`epsilon_greedy_policy` is used to randomly choose an action with probabilty `epsilon` and the action $max_{a}Q(s_{t}, a)$ with probability `1-epsilon`.
 
 #### 2.3.4. `update_target(self, model, target_model)`
 Update target model parameters with weights will be copied from local model  to target model
@@ -312,7 +341,11 @@ class DQN_agent():
 
 ```
 
-## 3. Creation of Bioreactor Environment
+## 3. Creating of Bioreactor Environment
+For this work, we use the chemostat model, which provides a standard description of bioprocess conditions. 
+This model is applicable to a wide range of other systems where cell or microorganism growth is important, including wastewater treatment [22] and the gut microbiome [23]. 
+Such systems can be especially difficult to control because they are often equipped with minimal online sensors [24], limiting the effectiveness of classical control techniques that are hampered by infrequent or delayed system measurements [20, 25].
+
 The class `BioreactorEnv()` create a chemostat environment that can handle an arbitrary number of bacterial strains where all are being controlled.
 
 ### 3.1 Initialisation
@@ -634,7 +667,7 @@ def reward_function(x):
 ## 5. Results
 
 ![fig](img/fig-return_explore_rate.png)  
-**Figure.** Return and explore rate
+**Figure.** Return and explore rate. Performance of the agent improves and the explore rate decreases during training.
 
 ![fig](img/fig-population_cells.png)  
 **Figure.** Population cells 
