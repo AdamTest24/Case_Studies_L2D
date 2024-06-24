@@ -16,9 +16,6 @@ import torch.optim as optim
 import torch.nn.functional as F
 
 
-# In[2]:
-
-
 def check_host_resources():
     """
     Checking RAM and GPU resources
@@ -62,13 +59,7 @@ def check_host_resources():
     #MX_HOST_MACHINE: NVIDIA RTX A200 8192MiB
 
 
-# In[3]:
-
-
-check_host_resources()
-
-
-# In[4]:
+#check_host_resources()
 
 
 #gpu_info = get_ipython().getoutput('nvidia-smi')
@@ -82,15 +73,9 @@ check_host_resources()
 #MX_HOST_MACHINE: NVIDIA RTX A200 8192MiB
 
 
-# In[5]:
-
-
 ## Setting and checking device
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(device)
-
-
-# In[6]:
 
 
 class QNetwork(nn.Module):
@@ -161,9 +146,6 @@ class ReplayBuffer:
     def __len__(self):
         """Return the current size of internal memory"""
         return len(self.memory)
-
-
-# In[7]:
 
 
 class DQN_agent():
@@ -352,10 +334,6 @@ class DQN_agent():
     
 
 
-
-# In[8]:
-
-
 class BioreactorEnv():
     '''
     Chemostat environment that can handle an arbitrary number of bacterial strains where all are being controlled
@@ -420,9 +398,6 @@ class BioreactorEnv():
         
         u = self.action_to_u(action)
         
-        #add noise
-        #Cin = np.random.normal(Cin, 0.1*Cin) #10% pump noise
-
         self.us.append(u)
 
         ts = [0, self.sampling_time]
@@ -641,23 +616,26 @@ def main():
 
     ## Train DQN_agent
     #n_episodes = 2000 #46.37mins
-    #n_episodes = 1000 #Original
+    n_episodes = 1000 #Original (22mins)
     #n_episodes = 500 #12.5mins
-    n_episodes = 100 # 2~ mins
+    #n_episodes = 200 # 4.5~ mins
+    #n_episodes = 100 # 2~ mins
     #n_episodes = 50 # 0.93mins
     #n_episodes = 20 # 0.43mins
     #n_episodes = 10 #0.23mins
     returns = agent.train(n_episodes) # list containing total reward from each episode
 
+    controlling_rate_decay=n_episodes / 11  #controlling_rate_decay=1.5
+    explore_rates = [agent.get_explore_rate(episode, controlling_rate_decay) for episode in range(1, n_episodes+1)]
+
     end_time = time.time()
     print(f'---------------------------------')
     print(f'Execution time (minutes): {(end_time - current_time)/60}')
 
-    controlling_rate_decay=n_episodes / 11  #controlling_rate_decay=1.5
-    explore_rates = [agent.get_explore_rate(episode, controlling_rate_decay) for episode in range(1, n_episodes+1)]
 
     ## Plotting and Saving plots
     fig, ax1 = plt.subplots()
+    fig.suptitle(r"Performance of the agent during training")
     plt.plot(returns, label='Return (i.e. rewards)')
     ax1.set_ylabel('Return')
     ax1.set_xlabel('Episode')
@@ -668,6 +646,7 @@ def main():
     plt.tight_layout()
     ax1.legend(loc=(0.21, 0.67))
     ax2.legend(loc=(0.6, 0.22))
+    plt.grid()
     plt.savefig('img/fig-return_explore_rate.png')
     plt.close()
     #plt.show()
@@ -679,6 +658,7 @@ def main():
     plt.legend()
     plt.xlabel('Time (hours)')
     plt.ylabel('Population cells/L')
+    plt.grid()
     plt.savefig('img/fig-population_cells.png')
     plt.close()
     #plt.show()
@@ -687,9 +667,11 @@ def main():
     fig.suptitle(r"Actions (env.us)")
     axs[0].step(np.arange(len(env.us))*sampling_time, [x[0] for x in env.us], label = '$u_1$')
     axs[0].set_ylabel("$C_{in} lower bound$")
+    axs[0].grid(True)
     axs[1].step(np.arange(len(env.us))*sampling_time, [x[1] for x in env.us], label = '$u_2$', color = 'orange')
     axs[1].set_ylabel("$C_{in} upper bound$")
     axs[1].set_xlabel("Time (hours)")
+    axs[1].grid(True)
     plt.savefig('img/fig-actions.png')
     plt.close()
     #plt.show()
