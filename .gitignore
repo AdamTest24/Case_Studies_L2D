@@ -3,9 +3,9 @@
 .idea
 
 ## figures
-fig-actions.png
-fig-population_cells.png
-fig-return_explore_rate.png
+**/fig-actions.png
+**/fig-population_cells.png
+**/fig-return_explore_rate.png
 
 ## ignore datapaths
 **/deep_learning_mab/Improved_notebooks/data/

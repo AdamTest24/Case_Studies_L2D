@@ -605,11 +605,13 @@ def main():
             Execution time (mins): 0.2304505189259847 	 with n_episodes 10
             Execution time (mins): 0.4359638055165609 	 with n_episodes 20 
             Execution time (mins): 0.9316037853558858 	 with n_episodes 50
-            Execution time (minutes): 2.070314041773478  with n_episodes 100
+            Execution time (minutes): 1.8308319965998332  with n_episodes 100
             Execution time (minutes): 12.566332964102427 with n_episodes 500
             Execution time (minutes): 22.788715147972106 with n_episodes 1000
+            Execution time (minutes): 46.37891451915105 with n_episodes 2000
         in CODESPACES  2-core • 8GB RAM • 32GB HD
             Execution time (mins): 0.3237577478090922 with n_episodes 20 
+            Execution time (mins): X with n_episodes 100
     """
     current_time = time.time()
 
@@ -638,11 +640,13 @@ def main():
     agent = DQN_agent(env, n_states, n_actions)
 
     ## Train DQN_agent
-    n_episodes = 1000 #Original
-    #n_episodes = 10 #0.23mins
-    #n_episodes = 20 # 0.43mins
-    #n_episodes = 50 # 0.93mins
+    #n_episodes = 2000 #46.37mins
+    #n_episodes = 1000 #Original
     #n_episodes = 500 #12.5mins
+    n_episodes = 100 # 2~ mins
+    #n_episodes = 50 # 0.93mins
+    #n_episodes = 20 # 0.43mins
+    #n_episodes = 10 #0.23mins
     returns = agent.train(n_episodes) # list containing total reward from each episode
 
     end_time = time.time()
