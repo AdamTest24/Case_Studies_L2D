@@ -144,7 +144,7 @@ We can configure how the agent learns from its environment with the following va
 * The variable `LR` is the learning rate (e.g., 0.0005).
 
 The neural network, $QNetwork$, is used to estimate **the value function**. 
-$QNetwork$ consisting of 20 nodes [27] where each node use a RELU activation function.
+$QNetwork$ consisting of 20 nodes [27], 64 nodes in this example (or any number depending on available computing power)
 The input layer had $n$ nodes, one for each **microbial strain**; the linear output layer had $2^n$ nodes corresponding to each **variable action**.
 Adam optimiser is used to dynamically adapt the learning rate which is common in RL. 
 The **populations levels** were scaled by a factor of `10e-5` before being entered the neural network  and generated values between 0 to 1 and prevent instability.
