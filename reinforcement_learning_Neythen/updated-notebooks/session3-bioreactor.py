@@ -598,9 +598,10 @@ def main():
     current_time = time.time()
 
     num_controlled_species = 2
-    sampling_time = 10  # minutes
+    sampling_time = 10  # minutes #Originals
     max_t_steps = int((24 * 60) / sampling_time)  # set this to 24 hours
-    initial_x = np.array([20000, 30000, 0., 0., 1., 0., 0., 0.]) # the initial state
+    initial_x = np.array([20000, 30000, 0., 0., 1., 0., 0., 0.]) # default initial state
+    #initial_x = np.array([30000, 20000, 0., 0., 1., 0., 0., 0.]) # other initial state
 
     n_states_env = 2
     n_actions_env = 4
@@ -640,7 +641,7 @@ def main():
     print(f'Execution time (minutes): {(end_time - current_time)/60}')
  
 
-    PLOT_TEST_NUMBER_ID=4
+    PLOT_TEST_NUMBER_ID=0
 
     ## Plotting and Saving plots
     fig, ax1 = plt.subplots()

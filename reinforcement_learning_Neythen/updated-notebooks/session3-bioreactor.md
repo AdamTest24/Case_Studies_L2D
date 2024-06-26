@@ -712,14 +712,16 @@ It is worth noting the stabilisation for final population curves always reach an
 ![fig](img/tests/tests_results_bioreactor.svg)  
 **Figure.** Results for running `4.4` code five times (TEST 00 to TEST 04) using 1000 episodes.
 
-## 6. Assignments 
-1. Demonstrate that the RL agent robust to different initial conditions and targets of the bioreactor environment? 
-```callout
-Use different initial conditions and run script 5 times per number of episodes
-```
-1.1 Add your conclusions on how the performance of the agent improves or worsened and the explore rate decreases during training. 
 
-## 7. References
+## 6. Conclusions 
+
+## 7. Assignments 
+### 7.1. Demonstrate that the RL agent robust to different initial conditions of the bioreactor environment 
+#### 7.1.1 Create population curves of five trained agents controlling the chemostat system with the goal of optimising product output, using default conditions (e.g, [20000, 30000]).
+#### 7.1.2 Create population curves of five trained agents controlling the chemostat system with the goal of optimising product output, using these initial conditions (e.g, [30000, 20000]).
+#### 7.1.3 Add your conclusions on how the performance of the agent improves or worsened as the explore rate decreases during training. 
+
+## 8. References
 [1] Treloar, Neythen J., Alex JH Fedorec, Brian Ingalls, and Chris P. Barnes. "Deep reinforcement learning for the control of microbial co-cultures in bioreactors." PLoS computational biology 16, no. 4 (2020): e1007783. [DOI](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007783); [google-citations](https://scholar.google.com/scholar?oi=bibs&hl=en&cites=17698721817212738220)
 
 [5] Croughan, Matthew S., Konstantin B. Konstantinov, and Charles Cooney. "The future of industrial bioprocessing: batch or continuous?." Biotechnology and bioengineering 112, no. 4 (2015): 648-651. [google-citations](https://scholar.google.com/scholar?cites=18103893455237911440&as_sdt=2005&sciodt=0,5&hl=en); [DOI](https://analyticalsciencejournals.onlinelibrary.wiley.com/doi/full/10.1002/bit.25529)
