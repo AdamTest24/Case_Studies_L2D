@@ -1,3 +1,9 @@
+"""
+Python `session3-bioreactor.py` script for Deep Q network for bioreactor optimisation
+RUNNING: Open a terminal, activate python environment and run python script:
+	conda activate l2dVE
+	python session3-bioreactor.py
+"""
 import nvidia_smi
 import time
 import numpy as np

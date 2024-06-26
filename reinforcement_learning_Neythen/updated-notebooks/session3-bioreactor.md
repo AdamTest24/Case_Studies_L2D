@@ -3,6 +3,8 @@
 * Author(s) for educational material: Miguel Xochicale
 * Contributor(s): Ed Lowther and Saba Ferdous
 
+**Note:** This markdown file is based on the python code: [session3-bioreactor.py](session3-bioreactor.py) (see running instructions in the beginning of the script).
+
 ## Questions
 * How can a Reinforcement Learning agent learn bioreactor environment that can handle an arbitrary number of bacterial strains?
 * Why the RL agent is robust to different initial conditions and targets? 
