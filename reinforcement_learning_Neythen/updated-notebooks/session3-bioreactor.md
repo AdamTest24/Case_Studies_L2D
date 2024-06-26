@@ -682,9 +682,6 @@ def reward_function(x):
 
     ## Train DQN_agent
     n_episodes = 1000 
-	# Approx execution time is 22mins
-	# in MX_HOST_MACHINE: 33.3G RAM, NVIDIA RTX A200 8192MiB and codespaces 
-	# in CODESPACES  2-core • 8GB RAM • 32GB HD
     returns = agent.train(n_episodes) # list containing total reward from each episode
 
     controlling_rate_decay=n_episodes / 11  
@@ -693,21 +690,27 @@ def reward_function(x):
 
 
 ## 5. Results
+The following results were obtained using `n_episodes = 1000`, taking approximately 25 minutes in a host machine with `33.3G RAM`, and GPU `NVIDIA RTX A200 8192MiB` and codespaces with `2-core • 8GB RAM • 32GB HD`.
 
-## 5.1 Single iteration
+### 5.1 Running `4.4` code one time.
+The following figures illustrates (A): perfomance of the agent during training, (B): actions of the lowerbound and upperbound of $C_{in}$, (C): final populations curve of $N_{1}$ and $N_{2}$.
+During the exploration phase the population levels vary and random actions are taken, as the explore rate decreases they move to the target values (Fig C).
+
 ![fig](img/fig-return_explore_rate.png)  
-**Figure.** Return and explore rate. Performance of the agent improves and the explore rate decreases during training.
+**Figure A** Return and explore rate. Performance of the agent improves and the explore rate decreases during training.
 
 ![fig](img/fig-actions.png)  
-**Figure.** Actions
+**Figure B** Actions
 
 ![fig](img/fig-population_cells.png)  
-**Figure.** Population cells 
+**Figure C** Population cells 
 
-## 5.2 Multiple interations
+### 5.2 Running `4.4` code multiple times.
+The following plots (Figs A, B and C) illustrate results for running `4.4` five times. 
+It is worth noting the stabilisation for final population curves always reach an average values closer to 20000 and 30000.
 
 ![fig](img/tests/tests_results_bioreactor.svg)  
-**Figure.** Results for 5 iteractions using 1000 episodes
+**Figure.** Results for running `4.4` code five times (TEST 00 to TEST 04) using 1000 episodes.
 
 ## 6. Assignments 
 1. Demonstrate that the RL agent robust to different initial conditions and targets of the bioreactor environment? 
