@@ -1,15 +1,14 @@
 # Case Studies for Learn to Discover! :brain: > :world_map: > :robot: 
 
 ## :bookmark_tabs: Table of content
-1. :white_check_mark: Deep learning 
+1. Deep learning
 	* [1-Intro_dl_MLPs.ipynb](deep_learning_mab/Improved_notebooks/1-Intro_dl_MLPs.ipynb) (✅  run in codespace)
 	* [Intro_dl_CNNs.ipynb](deep_learning_mab/MAB_New_Edits/Intro_dl_CNNs.ipynb) (✅ run in codespace)
-2. :white_check_mark: Reinforcement learning 
+2. Reinforcement learning
 	* [session1-tabular.ipynb](reinforcement_learning_Neythen/updated-notebooks/session1-tabular.ipynb) (✅  run in codespace)
 	* [session2-deep.ipynb](reinforcement_learning_Neythen/updated-notebooks/session2-deep.ipynb) (✅  run in codespace)
-	* [session3-bioreactor.ipynb](reinforcement_learning_Neythen/updated-notebooks/session3-bioreactor.ipynb) or [session3-bioreactor.py](reinforcement_learning_Neythen/updated-notebooks/session3-bioreactor.py) in GitHub. (✅ run in codespace)
-3. :warning: Classifier for two groups of proteins
-	* TODO! 
+	* [session3-bioreactor.md](reinforcement_learning_Neythen/updated-notebooks/session3-bioreactor.md) and [session3-bioreactor.py](reinforcement_learning_Neythen/updated-notebooks/session3-bioreactor.py) in GitHub. (✅ run in codespace)
+3. :warning: Classifier for two groups of proteins. TODO!
 
 ## :star2: Getting started!
 

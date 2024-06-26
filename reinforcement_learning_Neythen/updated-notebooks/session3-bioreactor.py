@@ -352,7 +352,7 @@ class BioreactorEnv():
         Parameters:
             xdot: array of the derivatives for all state variables
             reward_func: function to calculate reward: reward = reward_func(state, action, next_state)
-            sampling_time: time between sampl-and-hold intervals
+            sampling_time: time between sample-and-hold intervals
             num_controlled_species: 2
             initial_x: the initial state (e.g., shape array (8,))
             max_t: maximum number of timesteps per episode
@@ -555,7 +555,8 @@ def xdot_product(x, t, u):
 
 def reward_function(x):
     """
-    caluclates the reward based on the rate of product output
+
+    Reward function for the optimisation of product formation (product output).
     :param x:
     :return:
     """
@@ -592,7 +593,7 @@ def main():
 
     num_controlled_species = 2
     sampling_time = 10  # minutes
-    t_steps = int((24 * 60) / sampling_time)  # set this to 24 hours
+    max_t_steps = int((24 * 60) / sampling_time)  # set this to 24 hours
     initial_x = np.array([20000, 30000, 0., 0., 1., 0., 0., 0.]) # the initial state
 
     n_states_env = 2
@@ -604,7 +605,7 @@ def main():
                         sampling_time,
                         num_controlled_species, 
                         initial_x, 
-                        t_steps, 
+                        max_t_steps, 
                         #n_states_env, #default: n_states = 10, 
                         #n_actions_env, #default: n_actions = 2, 
                         continuous_s = True)  
@@ -631,7 +632,9 @@ def main():
     end_time = time.time()
     print(f'---------------------------------')
     print(f'Execution time (minutes): {(end_time - current_time)/60}')
+ 
 
+    PLOT_TEST_NUMBER_ID=4
 
     ## Plotting and Saving plots
     fig, ax1 = plt.subplots()
@@ -647,7 +650,7 @@ def main():
     ax1.legend(loc=(0.21, 0.67))
     ax2.legend(loc=(0.6, 0.22))
     plt.grid()
-    plt.savefig('img/fig-return_explore_rate.png')
+    plt.savefig(f'img/tests/TEST_{PLOT_TEST_NUMBER_ID}_fig-return_explore_rate.png')
     plt.close()
     #plt.show()
 
@@ -659,7 +662,7 @@ def main():
     plt.xlabel('Time (hours)')
     plt.ylabel('Population cells/L')
     plt.grid()
-    plt.savefig('img/fig-population_cells.png')
+    plt.savefig(f'img/tests/TEST_{PLOT_TEST_NUMBER_ID}_fig-population_cells.png')
     plt.close()
     #plt.show()
 
@@ -672,7 +675,7 @@ def main():
     axs[1].set_ylabel("$C_{in} upper bound$")
     axs[1].set_xlabel("Time (hours)")
     axs[1].grid(True)
-    plt.savefig('img/fig-actions.png')
+    plt.savefig(f'img/tests/TEST_{PLOT_TEST_NUMBER_ID}_fig-actions.png')
     plt.close()
     #plt.show()
 
