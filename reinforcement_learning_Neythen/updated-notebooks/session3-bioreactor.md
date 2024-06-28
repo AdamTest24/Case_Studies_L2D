@@ -690,7 +690,6 @@ def reward_function(x):
 
 
 ## 5. Results
-The following results were obtained using `n_episodes = 1000`, taking approximately 25 minutes in a host machine with `33.3G RAM`, and GPU `NVIDIA RTX A200 8192MiB` and codespaces with `2-core • 8GB RAM • 32GB HD`.
 
 ### 5.1 Running `4.4` code one time.
 The following figures illustrates (A): perfomance of the agent during training, (B): actions of the lowerbound and upperbound of $C_{in}$, (C): final populations curve of $N_{1}$ and $N_{2}$.
@@ -712,8 +711,26 @@ It is worth noting the stabilisation for final population curves always reach an
 ![fig](img/tests/tests_results_bioreactor.svg)  
 **Figure.** Results for running `4.4` code five times (TEST 00 to TEST 04) using 1000 episodes.
 
+### 5.3 Peformance and computing
+The above results were obtained using `n_episodes = 1000`, taking approximately 25 minutes in a host machine with `33.3G RAM`, and GPU `NVIDIA RTX A200 8192MiB` and codespaces with `2-core • 8GB RAM • 32GB HD`.
+Similarly, the following executions times were performed either with a host computer "33.3G RAM, NVIDIA RTX A200 8192MiB" or in CODESPACES  "2-core • 8GB RAM • 32GB HD" with different episodes values.
+Note that such execition times might vary for your system.
+* Host computer: 33.3G RAM, NVIDIA RTX A200 8192MiB
+	* Execution time (mins): 0.2304505189259847 	 with n_episodes 10
+	* Execution time (mins): 0.4359638055165609 	 with n_episodes 20 
+	* Execution time (mins): 0.9316037853558858 	 with n_episodes 50
+	* Execution time (minutes): 1.8308319965998332  with n_episodes 100
+	* Execution time (minutes): 12.566332964102427 with n_episodes 500
+	* Execution time (minutes): 22.788715147972106 with n_episodes 1000
+	* Execution time (minutes): 46.37891451915105 with n_episodes 2000
+* in CODESPACES  2-core • 8GB RAM • 32GB HD
+	* Execution time (mins): 0.3237577478090922 with n_episodes 20 
+	* Execution time (mins): 23.73 with n_episodes 1000
 
 ## 6. Conclusions 
+We presented how Reinforcement learning, concernig with optimising an agent’s behaviour within an environment, is applied to control two auxotrophic species in a chemostat.
+This include introduction to terminology, setting up Deep Q-angent, creating of Bioreactor Environment, setting up chemostat environment and DQN_agent and train DQN_agent, and presenting results with different running and execution times. 
+Hence, we demonstrated (A) how to setup a standard description of bioprocess conditions using the chemostat model and (B) the challneges on how the systems can be especially difficult to control with different initial conditions running at multiple times. 
 
 ## 7. Assignments 
 ### 7.1. Demonstrate that the RL agent robust to different initial conditions of the bioreactor environment 
