@@ -7,10 +7,9 @@ conda activate l2dVE
 python session3-bioreactor.py
 ```
 
-* Using jupyter notebook
+* Using jupyter notebooks
 ``` 
 conda activate l2dVE && jupyter notebook --browser=firefox
-jupyter nbconvert --to python session3-bioreactor.ipynb #to convert notebook to python script
 ```
 
 ## `session1-tabular.ipynb`

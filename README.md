@@ -37,11 +37,16 @@ For this repository, we have created a config file, [devcontainer.json](.devcont
 6. When you are done, just stop running the container. Click on the bottom left menu `Codespaces: funny_name_ID`, select `Stop Current Codebase`  
 7. You might like to go to https://github.com/codespaces/ to delete your container `docker_funny_name_ID` by clicking in three dots and delete it. This way you avoid wasting your 120 hours and 15GB for storage per month.
 
-Alternatively, you can open the notebook you would like to run on Github and click on the codespace badge (which looks like this ![badge icon](https://github.com/codespaces/badge.svg)) at the top. Then fill in the setup parameters on the browser:
+Alternatively, you can open the notebook you would like to run on GitHub and click on the codespace badge (which looks like this ![badge icon](https://github.com/codespaces/badge.svg)) at the top. Then fill in the setup parameters on the browser:
 - Select the branch you would like to use 
 - Select the Dev container configuration (Miniconda Python 3)
 - The defaults for the region and machine type should work fine for us!
 Then continue with the setup from step 2 above.
+
+## 🤝 Contributing
+`Case_Studies_L2D` follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md).
+Contributions, issues and feature requests are welcome, so feel free to open new [issues](https://github.com/LearnToDiscover/Case_Studies_L2D/issues/new/choose).
+We also suggest to checking [the contributing guide](CONTRIBUTING.md).
 
 ## :octocat: Clone repository
 Clone the repository by typing (or copying) the following line in a terminal at your selected path in your machine.
@@ -185,3 +190,8 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 
 This work follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.  
 Contributions of any kind welcome!
+
+## Licensing and copyright
+Copyright 2024 University College London.
+`Case_Studies_L2D` is released under the Apache 2.0 licence.
+Please see the [license file](LICENSE.md) for details.
