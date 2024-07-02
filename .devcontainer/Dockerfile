@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/devcontainers/miniconda:0-3
 
 # Copy environment.yml (if found) to a temp location so we update the environment. Also
 # copy "noop.txt" so the COPY instruction does not fail if no environment.yml exists.
-COPY ../dependencies/environment.yaml ../dependencies/noop.txt /tmp/conda-tmp/
+COPY ../.dependencies/environment.yaml ../.dependencies/noop.txt /tmp/conda-tmp/
 RUN if [ -f "/tmp/conda-tmp/environment.yaml" ]; then umask 0002 && /opt/conda/bin/conda env create -f /tmp/conda-tmp/environment.yaml; fi \
     && rm -rf /tmp/conda-tmp
 
