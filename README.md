@@ -1,13 +1,14 @@
 # Case Studies for Learn to Discover! :brain: > :world_map: > :robot: 
 
 ## :bookmark_tabs: Table of content
-1. Deep learning 
-	* Open [1-Intro_dl_MLPs.ipynb](deep_learning_mab/Improved_notebooks/1-Intro_dl_MLPs.ipynb) in GitHub. (✅  run in codespace)   
-	* Open [Intro_dl_CNNs.ipynb](deep_learning_mab/MAB_New_Edits/Intro_dl_CNNs.ipynb) in GitHub. (✅ run in codespace)   
-2. Reinforcement learning 
-	* Open [session1-tabular.ipynb](reinforcement_learning_Neythen/updated-notebooks/session1-tabular.ipynb) in GitHub. (✅  run in codespace)
-	* Open [session2-deep.ipynb](reinforcement_learning_Neythen/updated-notebooks/session2-deep.ipynb) in GitHub. (✅  run in codespace)
-3. Classifier for two groups of proteins
+1. Deep learning
+	* [1-Intro_dl_MLPs.ipynb](deep_learning_mab/Improved_notebooks/1-Intro_dl_MLPs.ipynb) (✅  run in codespace)
+	* [Intro_dl_CNNs.ipynb](deep_learning_mab/MAB_New_Edits/Intro_dl_CNNs.ipynb) (✅ run in codespace)
+2. Reinforcement learning
+	* [session1-tabular.ipynb](reinforcement_learning_Neythen/updated-notebooks/session1-tabular.ipynb) (✅  run in codespace)
+	* [session2-deep.ipynb](reinforcement_learning_Neythen/updated-notebooks/session2-deep.ipynb) (✅  run in codespace)
+	* [session3-bioreactor.md](reinforcement_learning_Neythen/updated-notebooks/session3-bioreactor.md) and [session3-bioreactor.py](reinforcement_learning_Neythen/updated-notebooks/session3-bioreactor.py) in GitHub. (✅ run in codespace)
+3. :warning: Classifier for two groups of proteins. TODO!
 
 ## :star2: Getting started!
 
@@ -15,36 +16,37 @@
 Create your conda environment as suggested [here](dependencies/README.md).   
 Then you can launch your jupyter notebooks.
 ``` 
-mamba activate l2dVE && jupyter notebook --browser=firefox
+conda activate l2dVE && jupyter notebook --browser=firefox
 ```
 
-### :cloud: Using Github Codespaces
-1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!
+### :cloud: Getting Started with Github Codespaces
+[Codespaces](https://docs.github.com/en/codespaces/overview) is a development environment hosted in the cloud. 
+For this repository, we have created a config file, [devcontainer.json](.devcontainer/devcontainer.json) that currently supports `2-core • 8GB RAM • 32GB` and added [NVIDIA CUDA features](https://github.com/devcontainers/features/pkgs/container/features%2Fnvidia-cuda), however the GPU option is only available for selected customers as [trial period](https://docs.github.com/en/enterprise-cloud@latest/codespaces/developing-in-a-codespace/getting-started-with-github-codespaces-for-machine-learning).
 
-	1.1 You might already have an image, in which case just activate `docker_funny_name_ID` at https://github.com/codespaces
+1. Create codespace: Go to `Code` icon and select `create codespace on PREFERED BRANCH`. Taking 4-ish minutes to set up!  
+	1.1 You might already have an image, in which case just activate `docker_funny_name_ID` at https://github.com/codespaces    
+	1.2 The default codespace is configured with `2-core • 8GB RAM • 32GB` but you can choose other options (4, 8, 16 cores, etc)  
+	1.3 Once the setup is complete, a Visual Studio Code IDE will show up on your browser     
+2. In the `EXPLORER` panel to the left, open the relevant notebook     
+3. In the notebook view, on the top right, click on `Select Kernel`  
+	3.1 From the drop down menu in the top centre, select: `Install enable suggested extensions Python + Jupyter`    
+	3.2 Select: `Python environments...` (you may have to click on `Select Kernel` again)    
+	3.3 From the drop down menu, select: `l2dVE (Python VERSION) /opt/conda/envs/l2dVE/bin/python`    
+4. Run cells in notebook and have fun! 🚀  
+5. You might like to commit changes. For this we suggest creating specific branches to avoid conflicts with the `main` branch   
+6. When you are done, just stop running the container. Click on the bottom left menu `Codespaces: funny_name_ID`, select `Stop Current Codebase`  
+7. You might like to go to https://github.com/codespaces/ to delete your container `docker_funny_name_ID` by clicking in three dots and delete it. This way you avoid wasting your 120 hours and 15GB for storage per month.
 
-	1.2 The default codespace is configured with `2-core • 8GB RAM • 32GB` but you can choose other options (4, 8, 16 cores, etc)
-
-	1.3 Once the setup is complete, a Visual Studio Code IDE will show up on your browser
-
-2. In the `EXPLORER` panel to the left, open the relevant notebook   
-3. In the notebook view, on the top right, click on `Select Kernel`
-
-	3.1 Select: `Python environments...` (you may have to click on `Select Kernel` again)
-
-	3.2 From the drop down menu, select: `l2dVE (Python VERSION) /opt/conda/envs/l2dVE/bin/python`
-
-4. Run cells in notebook and have fun! 🚀
-5. You might like to commit changes. For this we suggest creating specific branches to avoid conflicts with the `main` branch
-6. When you are done, just stop running the container. Click on the bottom left menu `Codespaces: funny_name_ID`, select `Stop Current Codebase`
-7. You might like to go to https://github.com/codespaces/ to delete your container `docker_funny_name_ID` by clicking in three dots and delete it
-
-Alternatively, you can open the notebook you would like to run on Github and click on the codespace badge (which looks like this ![badge icon](https://github.com/codespaces/badge.svg)) at the top. Then fill in the setup parameters on the browser:
+Alternatively, you can open the notebook you would like to run on GitHub and click on the codespace badge (which looks like this ![badge icon](https://github.com/codespaces/badge.svg)) at the top. Then fill in the setup parameters on the browser:
 - Select the branch you would like to use 
 - Select the Dev container configuration (Miniconda Python 3)
 - The defaults for the region and machine type should work fine for us!
 Then continue with the setup from step 2 above.
 
+## 🤝 Contributing
+`Case_Studies_L2D` follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md).
+Contributions, issues and feature requests are welcome, so feel free to open new [issues](https://github.com/LearnToDiscover/Case_Studies_L2D/issues/new/choose).
+We also suggest to checking [the contributing guide](CONTRIBUTING.md).
 
 ## :octocat: Clone repository
 Clone the repository by typing (or copying) the following line in a terminal at your selected path in your machine.
@@ -188,3 +190,8 @@ Thanks goes to all these people ([emoji key](https://allcontributors.org/docs/en
 
 This work follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.  
 Contributions of any kind welcome!
+
+## Licensing and copyright
+Copyright 2024 University College London.
+`Case_Studies_L2D` is released under the Apache 2.0 licence.
+Please see the [license file](LICENSE.md) for details.

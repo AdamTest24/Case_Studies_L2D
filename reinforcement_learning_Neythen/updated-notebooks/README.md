@@ -1,8 +1,18 @@
 ## Reinforcement learning course materials
 
-Table of contents: 
+## Running code locally 
+* Using python script
+```
+conda activate l2dVE
+python session3-bioreactor.py
+```
 
-### `session1-tabular.ipynb`
+* Using jupyter notebooks
+``` 
+conda activate l2dVE && jupyter notebook --browser=firefox
+```
+
+## `session1-tabular.ipynb`
 - Introduction to reinforcement learning
 - Background
     - Ancient history
@@ -16,7 +26,7 @@ Table of contents:
     - Monte Carlo agents
 - End-of-chapter exercises
 
-### `session2-deep.ipynb`
+## `session2-deep.ipynb`
 - Deep reinforcement learning: Introduction
 - Network construction
 - Memory
@@ -25,5 +35,8 @@ Table of contents:
 - Case study
 - End-of-chapter exercises
 
-### `session3-bioreactor.ipynb`
-- Real-world example: work-in-progress
+## `session3-bioreactor.ipynb` -- Real-world example
+- DQN agent (e.g, QNetwork, ReplayBuffer, DQN_agent)
+- Bioreactor Environment (e.g, monod, xdot_product, reward_f)
+- Assigments with `DQN_agent(BioreactorEnv, n_states, n_actions)`
+

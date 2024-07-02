@@ -17,6 +17,7 @@ dependencies:
     - scikit-learn
     - medmnist
     - seaborn
+    - nvidia-ml-py3
     - gymnasium[toy-text]
     - ipympl
 prefix: /opt/conda/envs/l2dVE

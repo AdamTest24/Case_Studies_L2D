@@ -2,6 +2,13 @@
 ## pycharm project path
 .idea
 
+## figures
+**/fig-actions.png
+**/fig-population_cells.png
+**/fig-return_explore_rate.png
+**/fig-return_explore_rate.png
+**/ TEST_**.png
+
 ## ignore datapaths
 **/deep_learning_mab/Improved_notebooks/data/
 **/MNIST

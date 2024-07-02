@@ -6,24 +6,27 @@ See further instructions [here](https://mamba.readthedocs.io/en/latest/installat
 
 ### In your local machine 
 ``` 
-mamba update -n base mamba
-mamba env create -f environment.yaml #will take 8-ish minutes depends on your connection
-#mamba env update --prune -n l2dVE -f environment.yaml # to prune your VE
-mamba activate l2dVE
-mamba list -n l2dVE # show list of installed packages
-#mamba remove -n l2dVE --all #in case you want to remove it
+conda update -n base -c conda-forge conda
+conda env create -f environment.yaml #will take 5-ish minutes depends on your connection
+#conda env update --prune -n l2dVE -f environment.yaml # to prune your VE
+conda activate l2dVE
+condaa list -n l2dVE # show list of installed packages
+#condaa remove -n l2dVE --all #in case you want to remove it
 ```
 
 * Quick test for the availability of cuda in your machine.
 ```
-mamba activate l2dVE
-python -c 'import torch; torch.cuda.is_available()'
+conda activate l2dVE
+python 
+import torch
+torch.cuda.is_available()
+#True
 ```
 
 ## Launch jupyter notebook
 ``` 
 cd path of your notebooks
-mamba activate l2dVE && jupyter notebook --browser=firefox
+conda activate l2dVE && jupyter notebook --browser=firefox
 ```
 
 ## Our code have been tested in the following machines:
